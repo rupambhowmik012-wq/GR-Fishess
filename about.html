@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About Us | GR Fishes - Best Fresh Fish Delivery in Siliguri & Siliguri</title>
+    <meta name="description" content="GR Fishes provides the freshest river and sea fish delivery in Siliguri, Jalpaiguri, and Siliguri. Specializing in Padma Rohu, Ilish, and Prawns.">
+    <meta name="keywords" content="Fresh Fish Siliguri, GR Fishes Siliguri, Buy Fish Online Jalpaiguri, Padma Rohu Delivery, Sea Fish Online West Bengal">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="dbhandler.js"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .hero-maroon { background: #800000; color: white; padding: 60px 20px; text-align: center; border-radius: 0 0 40px 40px; }
+        .content-card { background: white; margin: -30px 20px 20px 20px; padding: 30px; border-radius: 24px; shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .accent-text { color: #800000; font-weight: 700; }
+        .feature-icon { font-size: 24px; color: #800000; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <header class="p-4 flex items-center gap-4 bg-[#800000] text-white">
+        <button onclick="location.href='./index.html'"><i class="fas fa-arrow-left"></i></button>
+        <h1 class="font-bold">About Us</h1>
+    </header>
+
+    <div class="hero-maroon">
+        <h2 class="text-3xl font-bold font-['Montserrat'] mb-2">GR FISHES</h2>
+        <p class="text-maroon-100 opacity-90">Bringing the Sea's Best Fishes to Your Doorstep</p>
+    </div>
+
+    <div class="content-card shadow-lg">
+        <h3 class="text-xl font-bold mb-4">Who We Are</h3>
+        <p class="text-slate-600 leading-relaxed mb-6">
+            Founded in <span class="accent-text">Siliguri, West Bengal</span>, GR Fishes is more than just a fish distributor. We are a team of seafood enthusiasts dedicated to bridging the gap between the pristine rivers of Bengal and your kitchen. 
+        </p>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="p-4 bg-slate-50 rounded-2xl text-center">
+                <i class="fas fa-check-circle feature-icon"></i>
+                <p class="text-xs font-bold uppercase">100% Fresh</p>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl text-center">
+                <i class="fas fa-truck feature-icon"></i>
+                <p class="text-xs font-bold uppercase">Local Delivery</p>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-bold mb-4">Our Mission</h3>
+        <p class="text-slate-600 leading-relaxed mb-6">
+            Our mission is simple: to provide the highest quality, chemical-free fish to the families of <span class="accent-text">Jalpaiguri and Siliguri</span>. Whether it's the iconic Padma Rohu, the majestic Ilish, or premium Freshwater Prawns, we ensure every piece is handled with care and delivered with precision.
+        </p>
+
+        <h3 class="text-xl font-bold mb-4">Where We Operate</h3>
+        <p class="text-slate-600 leading-relaxed mb-4">
+            We are proudly rooted in Siliguriand serve the surrounding regions including:
+        </p>
+        <ul class="space-y-2 mb-8">
+            <li class="flex items-center gap-2 text-sm text-slate-700"><i class="fas fa-map-marker-alt text-red-500"></i> Siliguri City</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><i class="fas fa-map-marker-alt text-red-500"></i> Binnaguri</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><i class="fas fa-map-marker-alt text-red-500"></i> Jalpaiguri District</li>
+        </ul>
+
+        <div class="border-t pt-6 text-center">
+            <h4 class="font-bold mb-2">Connect With Us</h4>
+            <div class="flex justify-center gap-6 text-2xl text-[#800000]">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://maps.app.goo.gl/ECqSZPFmrC6TcTb28?g_st=aw"><i class="fas fa-map-marked-alt"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="p-10 text-center text-slate-400 text-xs">
+        &copy; 2026 GR Fishes. All Rights Reserved.<br>
+        Quality Fish Distribution in North Bengal.
+    </footer>
+
+    <script>
+        // Standard physical back button logic
+        history.pushState(null, null, location.href);
+        window.onpopstate = () => { location.href = "./index.html"; };
+    </script>
+</body>
+</html>

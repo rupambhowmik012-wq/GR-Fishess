@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    <title>My Orders - GR Fishes</title>  
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">  
+    <script src="https://cdn.tailwindcss.com"></script>  
+    <style>  
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }  
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif !important; -webkit-tap-highlight-color: transparent; }  
+          
+        body { background-color: #f1f5f9; color: #1e293b; overflow-x: hidden; padding-bottom: 85px !important; }  
+
+        .svg-icon { width: 6vw; height: 6vw; fill: #1e293b; }  
+
+        /* Header */  
+        .page-header { background: white; padding: 4vw 5vw; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; position: sticky; top: 0; z-index: 1000; }  
+        .page-header h2 { font-size: 4.5vw; font-weight: 500; color: #0f172a; margin-left: 4vw; text-transform: uppercase;}  
+        .header-action { margin-left: auto; color: #800000; font-weight: 600; font-size: 3.5vw; display: flex; align-items: center; gap: 1vw;}
+
+        /* List View Styles */
+        #login-required { display: none; height: 85vh; flex-direction: column; align-items: center; justify-content: center; padding: 10vw; text-align: center; }  
+        .auth-icon { width: 20vw; height: 20vw; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 6vw; }  
+
+        .order-card-list { background: white; margin: 3vw 0; padding: 4vw; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; cursor: pointer;}  
+        .card-top { display: flex; gap: 4vw; }  
+        .item-img { width: 20vw; height: 20vw; border-radius: 2vw; object-fit: cover; background: #f8fafc; border: 1px solid #e2e8f0; }  
+        
+        .status-badge { font-size: 3vw; font-weight: 500; display: flex; align-items: center; gap: 1.5vw; margin-bottom: 1vw;}
+        .status-dot { width: 2.5vw; height: 2.5vw; border-radius: 50%; }
+        .dot-placed { background: #059669; }
+        .dot-cancelled { background: #dc2626; }
+        .dot-delivered { background: #64748b; }
+
+        /* Detail View Styles */
+        #detail-view { display: none; background: #f1f5f9; min-height: 100vh;}
+        .detail-section { background: white; padding: 4vw; margin-bottom: 2vw; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0;}
+        
+        /* Product Info Box */
+        .product-brief { display: flex; gap: 4vw; align-items: center;}
+        .product-brief img { width: 18vw; height: 18vw; border-radius: 2vw; object-fit: cover;}
+        
+        /* Tracking Timeline UI */
+        .tracker-container { position: relative; padding: 8vw 4vw 4vw 4vw; }
+        .progress-line-bg { position: absolute; top: 10vw; left: 10%; width: 80%; height: 2px; background: #cbd5e1; z-index: 1;}
+        .progress-line-fill { position: absolute; top: 10vw; left: 10%; height: 2px; background: #059669; z-index: 2; transition: width 0.3s;}
+        
+        .track-steps { display: flex; justify-content: space-between; position: relative; z-index: 3;}
+        .step { display: flex; flex-direction: column; align-items: center; width: 25%; gap: 2vw;}
+        .step-icon { width: 5vw; height: 5vw; border-radius: 50%; background: #cbd5e1; display: flex; justify-content: center; align-items: center; color: white; font-size: 2.5vw;}
+        .step.active .step-icon { background: #059669; }
+        .step-text { font-size: 2.8vw; color: #475569; text-align: center; line-height: 1.2; font-weight: 500;}
+        .step.active .step-text { color: #0f172a; }
+        .step-date { font-size: 2.5vw; color: #64748b; }
+
+        /* Action Buttons */
+        .btn-outline { width: 100%; padding: 3vw; border: 1px solid #cbd5e1; border-radius: 2vw; font-size: 3.5vw; font-weight: 500; color: #800000; text-align: center; background: white;}
+        .btn-filled { width: 100%; padding: 3.5vw; border-radius: 2vw; font-size: 3.5vw; font-weight: 500; color: white; text-align: center; background: #800000; margin-top: 3vw;}
+
+        /* Rating Stars */
+        .rating-box { display: flex; justify-content: space-between; padding: 2vw 6vw;}
+        .star-item { display: flex; flex-direction: column; align-items: center; gap: 1vw;}
+        .star-icon { width: 8vw; height: 8vw; fill: transparent; stroke: #cbd5e1; stroke-width: 1.5; }
+        .star-text { font-size: 2.5vw; color: #64748b;}
+
+        /* Bill & Address Details */
+        .detail-row { display: flex; justify-content: space-between; margin-top: 3vw; font-size: 3.5vw; color: #334155;}
+        .address-box { display: flex; gap: 3vw; margin-top: 2vw;}
+        .address-text { font-size: 3.2vw; color: #64748b; line-height: 1.5;}
+
+        /* Cancellation Modal */  
+        #cancel-modal { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 2000; display: none; align-items: flex-end; }  
+        .modal-sheet { background: white; width: 100%; border-radius: 6vw 6vw 0 0; padding: 6vw; animation: slideUp 0.3s ease-out; }  
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }  
+        .reason-box { width: 100%; background: #f8fafc; border-radius: 2vw; padding: 3vw; font-size: 3.5vw; outline: none; margin-bottom: 4vw; border: 1px solid #cbd5e1; }  
+
+        /* BOTTOM NAVIGATION */  
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; background: white; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #e2e8f0; z-index: 5000; padding-bottom: env(safe-area-inset-bottom); }  
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #94a3b8; text-decoration: none; width: 25%; font-size: 10px; font-weight: 500; gap: 4px; }  
+        .nav-icon { width: 24px; height: 24px; fill: currentColor; }  
+        .nav-item.active { color: #800000; }  
+    </style>
+</head>  
+<body>  
+
+<div id="main-view">
+    <header class="page-header">  
+        <button onclick="window.location.href='index.html'"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>  
+        <h2>My Orders</h2>  
+    </header>  
+
+    <div id="orders-container">  
+        <div id="list-area" class="pb-4"></div>  
+    </div>  
+
+    <div id="login-required">  
+        <div class="auth-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="#94a3b8"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>  
+        <h3 class="text-lg font-medium text-slate-900 mb-2">Login to see orders</h3>  
+        <p class="text-sm text-slate-400 mb-8">Please login to track your current orders and view history.</p>  
+        <button onclick="window.location.href='login.html'" class="bg-[#800000] text-white px-12 py-3 rounded-full font-medium shadow-lg">Login Now</button>  
+    </div> 
+</div>
+
+<div id="detail-view">
+    <header class="page-header">  
+        <button onclick="closeDetails()"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg></button>  
+        <h2>ORDER DETAILS</h2>  
+        <div class="header-action">
+            <svg style="width:4.5vw; height:4.5vw; fill:none; stroke:currentColor; stroke-width:2;" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            HELP
+        </div>
+    </header> 
+    
+    <div id="detail-content">
+        </div>
+</div>
+
+<div id="cancel-modal">  
+    <div class="modal-sheet">  
+        <h3 class="text-[4.5vw] font-medium mb-1 text-slate-800">Cancel Order</h3>  
+        <p class="text-[3vw] text-slate-500 mb-4">Are you sure you want to cancel this item?</p>  
+        <textarea class="reason-box" id="cancel-reason" placeholder="Tell us why you are cancelling..." rows="3"></textarea>  
+        <div class="flex gap-3">  
+            <button onclick="closeCancel()" class="flex-1 py-3 text-slate-500 font-medium border border-slate-300 rounded-lg">Don't Cancel</button>  
+            <button onclick="confirmCancellation()" class="flex-1 py-3 bg-[#800000] text-white rounded-lg font-medium shadow-md">Cancel Order</button>  
+        </div>  
+    </div>  
+</div>  
+
+<nav class="bottom-nav">  
+    <a href="index.html" class="nav-item">  
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>  
+        <span>Home</span>  
+    </a>  
+    <a href="orders html" class="nav-item active">  
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>  
+        <span>Orders</span>  
+    </a>  
+    <a href="support.html" class="nav-item">  
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-2.2 2.2a15.045 15.045 0 0 1-6.59-6.59l2.2-2.21a.96.96 0 0 0 .25-1.01c-.36-1.11-.56-2.3-.56-3.53 0-.55-.45-1-1-1H3.03c-.55 0-1 .45-1 1C2.03 12.38 11.62 21.97 20.01 21.97c.55 0 1-.45 1-1v-4.59c0-.55-.45-1-1-1z"/></svg>  
+        <span>Support</span>  
+    </a>  
+    <a href="login.html" class="nav-item">  
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>  
+        <span>Profile</span>  
+    </a>  
+</nav>  
+
+<script>  
+    let currentUser = null;
+    let isLoggedIn = false;  
+    let orders = [];  
+    let activeOrderDetailsId = null;
+
+    // Utility: Date Formatter (Same Day Delivery for Fish)
+    function formatOrderDate(timestamp) {
+        const d = new Date(timestamp);
+        const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        return `${d.getDate().toString().padStart(2, '0')} ${months[d.getMonth()]}`;
+    }
+
+    function getCurrentUser(){
+        const users = JSON.parse(localStorage.getItem('gr_users')) || [];
+        if(users && !Array.isArray(users)){
+            const fixed = [users];
+            localStorage.setItem('gr_users', JSON.stringify(fixed));
+            return fixed.find(u => u.isLoggedIn);
+        }
+        return users.find(u => u.isLoggedIn);
+    }  
+
+    function syncSession() {  
+        currentUser = getCurrentUser();
+        isLoggedIn = !!currentUser;
+        
+        const allOrders = JSON.parse(localStorage.getItem('gr_orders')) || [];
+        if (isLoggedIn && currentUser) {
+            orders = allOrders.filter(ord => ord.userPhone === currentUser.phone);
+            // Sort by newest first
+            orders.sort((a,b) => b.timestamp - a.timestamp);
+        } else {
+            orders = [];
+        }
+        
+        renderList(); 
+        
+        // If a detail view is currently open, refresh it
+        if(activeOrderDetailsId) {
+            const updatedOrder = orders.find(o => o.id === activeOrderDetailsId);
+            if(updatedOrder) openDetails(updatedOrder.id);
+        }
+    }  
+
+    window.addEventListener('storage', (e) => {  if (e.key === 'gr_users' || e.key === 'gr_orders') syncSession(); });  
+
+    function renderList() {  
+        if(!isLoggedIn) {  
+            document.getElementById('login-required').style.display = 'flex';  
+            document.getElementById('orders-container').style.display = 'none';  
+            return;  
+        }  
+
+        document.getElementById('login-required').style.display = 'none';  
+        document.getElementById('orders-container').style.display = 'block';  
+
+        const list = document.getElementById('list-area');  
+          
+        if(orders.length === 0) {  
+            list.innerHTML = `<div class="pt-24 text-center text-slate-400 text-[4vw]">No orders found. <br><span class="text-[3.5vw]">Start adding fresh fish to your cart!</span></div>`;  
+            return;  
+        }  
+
+        list.innerHTML = orders.map(ord => {  
+            let dotClass = "dot-placed";  
+            let statusText = ord.status;
+            let statusColor = "text-green-700";
+
+            if(ord.status.includes("Way") || ord.status.includes("Delivered")) {
+                dotClass = "dot-delivered"; 
+                statusColor = "text-slate-600";
+            }
+            if(ord.status === "Cancelled") {
+                dotClass = "dot-cancelled";
+                statusColor = "text-red-600";
+            }
+
+            return `  
+            <div class="order-card-list" onclick="openDetails('${ord.id}')">  
+                <div class="status-badge ${statusColor}">
+                    <div class="status-dot ${dotClass}"></div>
+                    ${statusText}
+                </div>
+                <div class="card-top mt-2">  
+                    <img src="${ord.img || 'https://via.placeholder.com/150'}" class="item-img">  
+                    <div class="flex-1">  
+                        <h4 class="text-[4vw] font-medium text-slate-800 leading-tight">${ord.name}</h4>  
+                        <p class="text-[3.2vw] text-slate-500 mt-1">Order #${ord.id}</p>  
+                        <p class="text-[3.5vw] font-medium mt-1">₹${ord.price}</p>  
+                    </div>  
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                </div>  
+            </div>  
+            `;  
+        }).join('');  
+    }  
+
+    // ------------- DETAIL VIEW LOGIC -------------
+
+    function openDetails(orderId) {
+        activeOrderDetailsId = orderId;
+        const ord = orders.find(o => o.id === orderId);
+        if(!ord) return;
+
+        const orderDate = formatOrderDate(ord.timestamp);
+        const isCancelled = ord.status === "Cancelled";
+        const isDelivered = ord.status === "Delivered";
+        
+        // Same-day delivery assumption for fresh food
+        const deliveryDateStr = `Delivery by ${orderDate}`; 
+        
+        // Progress Calculation (Simplified: Placed -> Shipped -> Out -> Delivered)
+        let fillWidth = "0%";
+        let step1 = "active", step2 = "", step3 = "", step4 = "";
+        
+        if(!isCancelled) {
+            if(ord.status === "Order Placed") { fillWidth = "15%"; }
+            else if(ord.status === "Shipped") { fillWidth = "50%"; step2 = "active"; }
+            else if(ord.status === "On the Way") { fillWidth = "83%"; step2 = "active"; step3 = "active"; }
+            else if(ord.status === "Delivered") { fillWidth = "100%"; step2 = "active"; step3 = "active"; step4 = "active"; }
+        }
+
+        const detailHTML = `
+            <div class="detail-section mt-2 flex justify-between items-center">
+                <div class="product-brief">
+                    <img src="${ord.img || 'https://via.placeholder.com/150'}">
+                    <div>
+                        <h3 class="text-[4vw] font-medium text-slate-800">Order #${ord.id}</h3>
+                        <p class="text-[3.5vw] text-slate-500 mt-1">${ord.name}</p>
+                        <p class="text-[3.2vw] text-slate-400 mt-1">Cash ₹${ord.price} • Quality Guaranteed</p>
+                    </div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
+
+            <div class="detail-section">
+                ${isCancelled ? `
+                    <div class="flex gap-3 items-center">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-[4vw] text-red-600 font-medium">Cancelled</h4>
+                            <p class="text-[3.2vw] text-slate-500">As per your request on ${orderDate}</p>
+                        </div>
+                    </div>
+                ` : isDelivered ? `
+                    <h4 class="text-[4vw] font-medium text-slate-800 text-center mb-4">How was the quality?</h4>
+                    <div class="rating-box">
+                        <div class="star-item"><svg class="star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span class="star-text">Very Bad</span></div>
+                        <div class="star-item"><svg class="star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span class="star-text">Bad</span></div>
+                        <div class="star-item"><svg class="star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span class="star-text">Ok-Ok</span></div>
+                        <div class="star-item"><svg class="star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span class="star-text">Good</span></div>
+                        <div class="star-item"><svg class="star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span class="star-text">Very Good</span></div>
+                    </div>
+                ` : `
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-[4vw] text-slate-800 font-medium">${ord.status}</h4>
+                            <p class="text-[3.2vw] text-slate-500">${deliveryDateStr}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tracker-container">
+                        <div class="progress-line-bg"></div>
+                        <div class="progress-line-fill" style="width: ${fillWidth};"></div>
+                        <div class="track-steps">
+                            <div class="step ${step1}">
+                                <div class="step-icon">✓</div>
+                                <span class="step-text">Ordered</span>
+                                <span class="step-date">${orderDate}</span>
+                            </div>
+                            <div class="step ${step2}">
+                                <div class="step-icon">✓</div>
+                                <span class="step-text">Shipped</span>
+                                <span class="step-date">${orderDate}</span>
+                            </div>
+                            <div class="step ${step3}">
+                                <div class="step-icon">✓</div>
+                                <span class="step-text">Out for<br>Delivery</span>
+                                <span class="step-date">${orderDate}</span>
+                            </div>
+                            <div class="step ${step4}">
+                                <div class="step-icon">✓</div>
+                                <span class="step-text">Delivery</span>
+                                <span class="step-date">${orderDate}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-indigo-50 mt-4 p-3 rounded-xl flex items-center gap-2">
+                         <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-[2.5vw] font-bold">1k+</div>
+                         <p class="text-[3vw] text-slate-700">Customers rated 4+ star for fresh quality</p>
+                    </div>
+                `}
+            </div>
+
+            <div class="detail-section">
+                ${(!isCancelled && !isDelivered) ? `
+                    <div class="flex justify-between items-center mb-4">
+                        <p class="text-[3.2vw] text-slate-500">Cancellation available till shipping!</p>
+                        <button onclick="openCancel()" class="text-[#800000] border border-[#800000] px-4 py-2 rounded-lg text-[3.2vw] font-medium bg-white">Cancel Order</button>
+                    </div>
+                ` : `
+                    <button onclick="window.location.href='index.html'" class="btn-outline">BUY AGAIN</button>
+                `}
+                
+                ${(!isCancelled && !isDelivered) ? `
+                <div class="mt-4 pt-4 border-t border-slate-100">
+                    <p class="text-[3.5vw] text-slate-600 mb-3">Your payment mode: <span class="float-right font-medium text-slate-800">Cash on Delivery • ₹${ord.price}</span></p>
+                    <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                        <div class="flex justify-between items-center mb-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 bg-white border border-slate-200 rounded-full flex items-center justify-center"><span class="text-[2.5vw] font-bold text-slate-800">UPI</span></div>
+                                <span class="text-[3.8vw] font-medium text-slate-800">Switch to UPI</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-emerald-700 font-bold text-[4vw]">₹${Math.round(ord.price * 0.95)}</p>
+                                <p class="bg-emerald-600 text-white text-[2.5vw] px-2 py-0.5 rounded-sm">Save ₹${Math.round(ord.price * 0.05)}</p>
+                            </div>
+                        </div>
+                        <button class="btn-filled">Pay Now</button>
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+
+            <div class="detail-section">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                        <span class="text-[4vw] font-medium text-slate-800">Delivery Address</span>
+                    </div>
+                    <span class="text-[3.5vw] font-bold text-[#800000]">CHANGE</span>
+                </div>
+                <div class="address-box">
+                    <div class="address-text">
+                        <span class="font-medium text-slate-800 block mb-1">${currentUser ? currentUser.name : 'Customer'}</span>
+                        ${currentUser && currentUser.address ? currentUser.address : '1122, Station Para, Binnaguri, Jalpaiguri, West Bengal, 735203<br>Phone: '+ (currentUser ? currentUser.phone : '')}
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section mb-[100px]">
+                <div class="detail-row mb-1">
+                    <span class="font-medium text-slate-800">Total Product Price</span>
+                    <span class="font-bold text-slate-800">₹${ord.price}</span>
+                </div>
+                <div class="text-right text-[#800000] text-[3vw] font-bold mb-4 uppercase cursor-pointer">View Bill</div>
+                
+                <div class="bg-slate-50 p-3 rounded-lg flex justify-between items-center border border-slate-200">
+                    <div class="flex items-center gap-2 text-slate-600 text-[3.5vw]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        Cash On Delivery
+                    </div>
+                    <span class="text-[3.5vw] font-medium text-slate-800">₹${ord.price}</span>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('detail-content').innerHTML = detailHTML;
+        document.getElementById('main-view').style.display = 'none';
+        document.getElementById('detail-view').style.display = 'block';
+        window.scrollTo(0,0);
+    }
+
+    function closeDetails() {
+        activeOrderDetailsId = null;
+        document.getElementById('detail-view').style.display = 'none';
+        document.getElementById('main-view').style.display = 'block';
+    }
+
+    function openCancel() {  
+        document.getElementById('cancel-modal').style.display = 'flex';  
+    }  
+
+    function closeCancel() {  
+        document.getElementById('cancel-modal').style.display = 'none';  
+    }  
+
+    function confirmCancellation() {  
+        const reason = document.getElementById('cancel-reason').value;  
+        if(!reason.trim()) { alert("Please tell us why you are cancelling."); return; }  
+          
+        if(activeOrderDetailsId) {
+            const allOrders = JSON.parse(localStorage.getItem('gr_orders')) || [];  
+            const globalIndex = allOrders.findIndex(o => o.id === activeOrderDetailsId);  
+              
+            if(globalIndex > -1) {  
+                allOrders[globalIndex].status = "Cancelled";  
+                localStorage.setItem('gr_orders', JSON.stringify(allOrders));  
+            }  
+        }
+
+        closeCancel();  
+        syncSession(); // This will refresh the active detail view automatically
+    }  
+
+    // Initialization
+    syncSession();  
+      
+</script>
+
+</body>  
+</html>

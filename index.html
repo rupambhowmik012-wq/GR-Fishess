@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    <title>GR Fishes - Premium Seafood</title>  
+    <meta name="description" content="Get chemical-free, fresh-water and sea fish delivered to your doorstep in Siliguri, Binnaguri, Jalpaiguri, and Malda. Best quality seafood since 2026.">  
+    <meta name="keywords" content="Fresh Fish Siliguri, Sea Food Delivery Jalpaiguri, Padma Rohu online, Buy fish Binnaguri, GR Fishes">  
+    <meta property="og:type" content="website">  
+    <meta property="og:title" content="GR FISHES - Premium Seafood Delivery">  
+    <meta property="og:description" content="Fresh chemical-free fish delivered from Siliguri to your home. Quality and hygiene guaranteed.">  
+    <meta property="og:image" content="https://images.unsplash.com/photo-1551244072-5d12893278ab?w=1000">  
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐟</text></svg>">  
+
+    <script type="application/ld+json">  
+    {  
+      "@context": "https://schema.org",  
+      "@type": "FishStore",  
+      "name": "GR FISHES",  
+      "image": "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=1000",  
+      "description": "Supply all types of sea food and fresh water fish in North Bengal.",  
+      "address": {  
+        "@type": "PostalAddress",  
+        "streetAddress": "Binnaguri Hub",  
+        "addressLocality": "Siliguri",  
+        "addressRegion": "West Bengal",  
+        "addressCountry": "IN"  
+      },  
+      "geo": {  
+        "@type": "GeoCoordinates",  
+        "latitude": 26.7271,  
+        "longitude": 88.3953  
+      },  
+      "url": "https://www.grfishes.com",  
+      "priceRange": "₹₹"  
+    }  
+    </script>  
+
+    <script>  
+        window.navTo = function(page) {  
+            if (window.location.pathname.includes('index.html') || window.location.pathname.includes('index.html')) {  
+                localStorage.setItem('gr_home_scroll', window.scrollY);  
+            }  
+            const rootPath = window.location.pathname.split('/').slice(0, -1).join('/');  
+            window.location.href = rootPath + '/' + page;  
+        };  
+
+        /* --- LOGGED IN SESSION MANAGEMENT --- */  
+        function getCurrentUser(){  
+            const users = JSON.parse(localStorage.getItem('gr_users')) || [];  
+            return users.find(u => u.isLoggedIn);  
+        }  
+
+        function checkLoginStatus() {  
+            const user = getCurrentUser();  
+            const menuContainer = document.getElementById('user-menu-container');  
+            const userPic = document.getElementById('user-header-pic');  
+            const userSil = document.getElementById('user-header-sil');  
+            const displayName = document.getElementById('user-display-name');  
+
+            if (user) {  
+                menuContainer.classList.remove('hidden');  
+                displayName.innerText = user.fullName?.split(' ')[0] || 'User';  
+                if(user.pic){  
+                    userPic.src = user.pic;  
+                    userPic.classList.remove('hidden');  
+                    userSil.classList.add('hidden');  
+                }  
+            } else {  
+                menuContainer.classList.add('hidden');  
+            }  
+        }  
+
+        function toggleUserMenu() {    
+            document.getElementById('user-dropdown').classList.toggle('hidden');    
+        }    
+
+        function handleLogout() {  
+            let users = JSON.parse(localStorage.getItem('gr_users')) || [];  
+            users = users.map(u=>{ u.isLoggedIn = false; return u; });  
+            localStorage.setItem('gr_users', JSON.stringify(users));  
+            window.location.reload();  
+        }  
+    </script>    
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Lato:wght@400&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">    
+    <script src="https://cdn.tailwindcss.com"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>    
+
+    <style>    
+        .no-scrollbar::-webkit-scrollbar { display: none !important; }    
+        .no-scrollbar { -ms-overflow-style: none !important; scrollbar-width: none !important; }    
+
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }    
+        * { margin: 0; padding: 0; box-sizing: border-box; }    
+            
+        body { background-color: #DFECEF; font-family: 'Poppins', sans-serif; }                            
+
+        /* PREMIUM LITE HEADER */
+        .header-container { background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); padding: 0 15px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; width: 100%; z-index: 1000;
+         border-bottom: 0.5px solid #000000; }    
+        .brand-wrapper { display: flex; align-items: center; gap: 10px; }    
+        .fish-icon { width: 36px !important; height: 36px !important; flex-shrink: 0; }    
+        .text-stack { display: flex; flex-direction: column; }    
+        .brand-title { color: #0f172a; font-family: 'Montserrat', sans-serif !important; font-size: 22px !important; font-weight: 800; line-height: 1; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; }    
+        .brand-subtitle { color: #64748b; font-family: 'Lato', sans-serif !important; font-size: 11px !important; font-weight: 600; margin-top: 3.5px; line-height: 1; letter-spacing: 1px; text-transform: lowercase; white-space: nowrap; }    
+            
+        #home-content { transition: opacity 0.3s ease-out, transform 0.3s ease-out; opacity: 1; transform: translateY(0); }    
+        .page-hidden { opacity: 0 !important; transform: translateY(15px) !important; }    
+
+        /* SOFTER PRODUCT CARDS */
+        .product-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; }    
+        .product-image-container { position: relative; height: 210px; background: #f8fafc; overflow: hidden; }    
+        .indicator-tag { position: absolute; top: 12px; right: 12px; border: 1px solid #800000; padding: 3px; border-radius: 2px; background: white; z-index: 10; }    
+        .indicator-dot { width: 10px; height: 10px; background: #800000; border-radius: 50%; }    
+            
+        .qty-box { display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 8px; padding: 4px; margin-bottom: 8px; width: 100%; }    
+        .qty-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: #800000; font-size: 18px; font-weight: 900; cursor: pointer; }    
+        .qty-input { width: 35px; text-align: center; background: transparent; font-weight: 800; font-size: 14px; color: #1e293b; pointer-events: none; }    
+
+                .add-btn-premium { background: #800000; color: white; padding: 8px 0; border-radius: 8px; font-weight: 800; font-size: 13px; width: 100%; text-align: center; transition: all 0.2s; box-shadow: 0 4px 10px rgba(128,0,0,0.15); border: none; }    
+        .btn-remove { background: #475569 !important; color: white !important; }    
+        .added-success { background: #22c55e !important; color: white !important; }    
+    
+        .added-success { background: #22c55e !important; border-bottom-color: #166534 !important; }    
+
+        #floating-cart { position: fixed; bottom: 85px; left: 15px; right: 15px; background: #800000; color: white; border-radius: 16px; z-index: 2000; display: none; flex-direction: column; box-shadow: 0 10px 25px rgba(128,0,0,0.4); overflow: hidden; animation: slideUp 0.3s ease-out; }    
+        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }    
+        .savings-banner { background: #166534; color: #ffffff; padding: 8px 15px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 8px; }    
+        .cart-main-info { padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }    
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.05); z-index: 5000; padding-bottom: env(safe-area-inset-bottom); }    
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; text-decoration: none; width: 25%; height: 100%; transition: all 0.3s ease; gap: 4px; }    
+        .nav-item span { font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 500; }    
+        .nav-icon { width: 22px; height: 22px; fill: currentColor; }    
+        .nav-item.active { color: #800000; }    
+
+        .about-preview-card { background: #ffffff; border-radius: 28px; padding: 32px 24px; margin: 24px 0; border: 1px solid #f1f5f9; box-shadow: 0 15px 35px rgba(0,0,0,0.03); }    
+        .premium-badge { display: inline-block; background: #f8fafc; color: #800000; padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; border: 1px solid #f1f5f9; }    
+        .map-card-link { background: #800000; color: white; padding: 22px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; transition: all 0.2s ease; margin-top: 24px; }    
+        .map-card-link:active { transform: scale(0.97); background: #660000; }    
+        .map-card-link i { font-size: 22px; color: rgba(255,255,255,0.8); }    
+        .tag-pill { display: flex; align-items: center; font-size: 11px; font-weight: 700; color: #475569; background: #f8fafc; padding: 10px 14px; border-radius: 12px; border: 1px solid #f1f5f9; }    
+
+        .rating-header-container { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }    
+        .rating-3d-card { background: #ffffff; padding: 15px 25px; border-radius: 20px; text-align: center; box-shadow: 8px 8px 20px #d1d5db, -8px -8px 20px #ffffff; border: 1px solid rgba(255,255,255,0.8); }    
+        .view-all-link { font-size: 12px; font-weight: 700; color: #800000; text-decoration: underline; text-underline-offset: 4px; border:none; background:none; cursor:pointer; }    
+        .review-pill { background: white; border: 1px solid #f1f5f9; padding: 20px; border-radius: 24px; height: 160px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }    
+        .star-filled { color: #fbbf24; font-size: 12px; }    
+        .review-text { font-size: 12px; color: #64748b; font-style: italic; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }    
+
+        #all-reviews-modal { position: fixed; inset: 0; background: #ffffff; z-index: 9999; display: none; flex-direction: column; animation: slideInUp 0.4s cubic-bezier(0, 0, 0.2, 1); }    
+        @keyframes slideInUp { from { transform: translateY(100%); } to { transform: translateY(0); } }    
+        .modal-header-premium { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 15px; background: white; position: sticky; top: 0; }    
+        .reviews-scroll-area { flex: 1; overflow-y: auto; padding: 20px; background: #f8fafc; }    
+        .full-review-card { background: white; padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }    
+          
+        /* Premium Instagram Story Animation & Styling */  
+        @keyframes storyProgress {  
+            0% { width: 0%; }  
+            100% { width: 100%; }  
+        }  
+                .story-border-gradient {  
+            background: linear-gradient(45deg, #f43f5e 0%, #800000 100%);  
+        }  
+  
+                .premium-story-section { position: relative; z-index: 10; }
+  
+  
+                        .story-name-text {  
+            font-size: 10px;  
+            white-space: nowrap; /* Forces text to stay on exactly one line */
+            overflow: hidden;  
+            text-overflow: ellipsis; /* Adds a clean ... at the end if it's too long */
+        }  
+  
+  
+        
+        /* DROPDOWN STYLES */
+        .dropdown-menu { display: none; position: absolute; z-index: 50; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); width: 220px; top: 100%; left: 0; margin-top: 8px; overflow: hidden; }
+        .dropdown-menu.show { display: block; }
+        .radio-circle { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; }
+        .radio-circle.active { border-color: #800000; }
+        .radio-circle.active::after { content: ''; width: 8px; height: 8px; background-color: #800000; border-radius: 50%; }
+    </style>
+
+</head>    
+<body onload="checkLoginStatus()">    
+<header class="header-container">    
+    <div class="brand-wrapper">    
+        <svg class="fish-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">    
+            <g fill="none" stroke="#800000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">    
+                <path d="M10,50 C25,25 75,25 90,50 C75,75 25,75 10,50 Z" />    
+                <path d="M10,50 L2,35 M10,50 L2,65" />    
+                <path d="M40,34 Q50,22 60,34" />    
+                <path d="M45,66 Q52,75 60,66" />    
+                <circle cx="75" cy="50" r="2" fill="#800000" stroke="none" />    
+                <path d="M65,40 Q60,50 65,60" stroke-width="2" />    
+            </g>    
+        </svg>    
+        <div class="text-stack">    
+            <h1 class="brand-title">GR FISHES</h1>    
+            <p class="brand-subtitle">supply all types of sea food</p>    
+        </div>    
+    </div>    
+    <div class="flex items-center gap-2">    
+        <div id="user-menu-container" class="relative hidden">    
+            <button onclick="toggleUserMenu()" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-700 border border-slate-200 active:scale-90 transition-all overflow-hidden">    
+                <i id="user-header-sil" class="fas fa-user-check"></i>    
+                <img id="user-header-pic" src="" class="hidden w-full h-full object-cover">    
+            </button>    
+            <div id="user-dropdown" class="absolute right-0 top-12 w-48 bg-white rounded-2xl shadow-2xl border border-slate-100 hidden z-[5000] overflow-hidden">    
+                <div class="p-4 border-b border-slate-50 bg-slate-50/50">    
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Welcome</p>    
+                    <p id="user-display-name" class="text-sm font-bold text-slate-800 truncate">Customer</p>    
+                </div>    
+                <button onclick="navTo('login.html')" class="w-full text-left p-4 text-sm font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-3">    
+                    <i class="fas fa-user-circle text-[#800000]"></i> Go to Profile    
+                </button>    
+                <button onclick="handleLogout()" class="w-full text-left p-4 text-sm font-bold text-red-600 hover:bg-red-50 flex items-center gap-3">    
+                    <i class="fas fa-sign-out-alt"></i> Logout    
+                </button>    
+            </div>    
+        </div>    
+        <button onclick="navTo('cart.html')" class="relative w-10 h-10 flex items-center justify-center bg-slate-50 rounded-xl border border-slate-200 active:scale-90 transition-all">    
+            <i class="fas fa-shopping-basket text-slate-700 text-lg"></i>    
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full border-2 border-white hidden">0</span>    
+        </button>    
+</div>
+
+</header>    
+<div class="bg-transparent px-4 sticky top-[68px] z-[900]">    
+    <div class="relative mt-2 group">    
+        <input type="text" id="searchInput" readonly onclick="navTo('search.html')" 
+            placeholder="Search fresh fish, prawns..." 
+            class="w-full bg-white border border-black text-slate-700 placeholder:text-slate-400 placeholder:font-normal font-normal text-[14px] rounded-2xl px-12 py-3.5 focus:outline-none transition-all cursor-pointer">    
+        
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-[#800000]">    
+            <i class="fas fa-search text-sm"></i>
+        </div>    
+
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
+            <div class="h-5 w-[1px] bg-slate-300"></div>
+            <button onclick="startVoiceSearch(event)" class="text-[#800000] active:scale-90 transition-transform">
+                <i class="fas fa-microphone text-sm"></i>
+            </button>
+        </div>
+    </div>    
+</div>
+ 
+   
+
+<div id="category-bar" class="bg-transparent px-4 pt-4 pb-3">    
+    <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">    
+        <button onclick="filterCategory('all')" class="cat-btn bg-[#800000] text-white px-4 py-1.5 rounded-full text-[12px] font-medium whitespace-nowrap transition-all border border-black">All items</button>    
+        
+        <button onclick="filterCategory('fresh')" class="cat-btn bg-white text-slate-700 px-4 py-1.5 rounded-full text-[12px] font-medium whitespace-nowrap transition-all border border-black">Fresh water fish</button>    
+        <button onclick="filterCategory('sea')" class="cat-btn bg-white text-slate-700 px-4 py-1.5 rounded-full text-[12px] font-medium whitespace-nowrap transition-all border border-black">Sea fish</button>    
+        <button onclick="filterCategory('crabs')" class="cat-btn bg-white text-slate-700 px-4 py-1.5 rounded-full text-[12px] font-medium whitespace-nowrap transition-all border border-black">Crabs & prawns</button>    
+    </div>    
+</div>
+    
+    
+
+<div id="home-content">    
+        <div id="banner-slider" class="w-full mt-0.8 px-4 mb-0 overflow-hidden">    
+    
+        <div class="swiper heroSwiper rounded-2xl shadow-sm border border-slate-100">    
+            <div class="swiper-wrapper">    
+   
+                <div class="swiper-slide relative h-[180px]">    
+                    <img src="https://images.unsplash.com/photo-1551244072-5d12893278ab?w=1000" class="w-full h-full object-cover">    
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent flex flex-col justify-end p-6">    
+                        <h2 class="text-white text-2xl italic font-black">The Golden Hour</h2>    
+                        <p class="text-slate-200 text-[10px] font-bold uppercase tracking-widest">Tradition & Freshness</p>    
+                    </div>    
+                </div>    
+                <div class="swiper-slide relative h-[180px]">    
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1000" class="w-full h-full object-cover">    
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent flex flex-col justify-end p-6">    
+                        <h2 class="text-white text-3xl italic font-black">নদীমাতৃক বাংলার স্বাদ</h2>    
+                        <p class="text-slate-200 text-xs font-bold">সেরা মানের টাটকা মাছের ঠিকানা।</p>    
+                    </div>    
+                </div>    
+            </div>    
+        </div>    
+    </div>    
+
+<div id="top-selling-stories" class="bg-transparent pt-2 pb-4 premium-story-section">  
+  
+  
+  
+    <div class="flex justify-between items-center mb-4 px-5">  
+        <h3 class="text-[15px] font-semibold text-slate-700 flex items-center gap-2 m-0">  
+  
+            <div class="w-6 h-6 rounded-full bg-red-50 flex items-center justify-center text-[#800000] border border-black">
+  
+                <i class="fas fa-arrow-trend-up text-xs"></i>  
+            </div>  
+            Trending Delicacies  
+        </h3>  
+        <button onclick="document.getElementById('stories-container').scrollBy({left: 150, behavior: 'smooth'})"   
+            class="w-8 h-8 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center active:scale-90 transition-all border border-slate-200">  
+            <i class="fas fa-arrow-right text-sm border border-black rounded-full w-6 h-6 inline-flex items-center justify-center"></i>
+</i>  
+        </button>  
+    </div>  
+      
+    <div class="relative w-full">  
+        <div class="flex gap- overflow-x-auto no-scrollbar px-4 pb-1" id="stories-container" style="scroll-behavior: smooth;">  
+  
+            </div>  
+    </div>  
+</div>  
+
+<div class="bg-transparent px-4 pt-3 pb-6">
+    
+    
+    
+    <div class="flex justify-start relative mb-4" id="sort-container">    
+        <button onclick="toggleSortDropdown()" class="px-4 py-2 border border-black text-slate-200 text-slate-700 rounded-xl text-[13px] font-semibold flex items-center gap-2 bg-white active:scale-95 transition-all shadow-sm hover:bg-slate-50">
+            <span id="current-sort-label">Sort & Filter</span> 
+            <i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
+        </button>    
+        
+        <div id="sort-dropdown" class="dropdown-menu">
+            <div class="py-2">
+                <div class="px-4 py-3 flex items-center justify-between hover:bg-slate-50 cursor-pointer border-b border-slate-50" onclick="applySort('top_selling', 'Relevance (Top Selling)')">
+                    <span class="text-[13px] text-slate-700 font-medium">Relevance (Top Selling)</span>
+                    <div id="radio-top_selling" class="radio-circle active"></div>
+                </div>
+                <div class="px-4 py-3 flex items-center justify-between hover:bg-slate-50 cursor-pointer border-b border-slate-50" onclick="applySort('price_low', 'Price (Low to High)')">
+                    <span class="text-[13px] text-slate-700 font-medium">Price (Low to High)</span>
+                    <div id="radio-price_low" class="radio-circle"></div>
+                </div>
+                <div class="px-4 py-3 flex items-center justify-between hover:bg-slate-50 cursor-pointer border-b border-slate-50" onclick="applySort('price_high', 'Price (High to Low)')">
+                    <span class="text-[13px] text-slate-700 font-medium">Price (High to Low)</span>
+                    <div id="radio-price_high" class="radio-circle"></div>
+                </div>
+                <div class="px-4 py-3 flex items-center justify-between hover:bg-slate-50 cursor-pointer" onclick="applySort('discount', 'Biggest Discount')">
+                    <span class="text-[13px] text-slate-700 font-medium">Biggest Discount</span>
+                    <div id="radio-discount" class="radio-circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    <div class="flex items-center gap-2 mb-4">    
+        <span id="total-item-count" class="text-slate-800 font-bold text-sm">0 items available</span>    
+        <div class="h-[1px] w-12 bg-slate-300"></div>    
+    </div>    
+    <div id="grid-catalog" class="grid grid-cols-1 gap-6"></div>    
+
+    <div id="about-section-container">    
+        <section class="about-preview-card">    
+            <div class="premium-badge">Since 2026</div>    
+            <h2 class="text-2xl font-bold text-slate-900 leading-tight mb-4">    
+                Premium Seafood <br>From <span class="text-[#800000]">Siliguri</span> to You.    
+            </h2>    
+            <p class="text-slate-500 text-sm leading-relaxed mb-6">    
+                Dedicated to bringing chemical-free, fresh-water treasures from the heart of Bengal directly to your doorstep. Quality and hygiene are at the core of everything we do.    
+            </p>    
+
+            <div class="flex flex-wrap gap-3">    
+                <div class="tag-pill"><i class="fas fa-certificate text-amber-500 mr-2"></i> Quality Check</div>    
+                <div class="tag-pill"><i class="fas fa-truck text-[#800000] mr-2"></i> Fast Delivery</div>    
+            </div>    
+
+            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mt-6 mb-3">Our Delivery Network</h4>    
+            <div class="flex flex-wrap gap-2 mb-2">    
+                <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full"><i class="fas fa-location-dot text-[10px] text-[#800000]"></i><span class="text-[11px] font-bold text-slate-700">Binnaguri</span></div>    
+                <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full"><i class="fas fa-location-dot text-[10px] text-[#800000]"></i><span class="text-[11px] font-bold text-slate-700">Siliguri</span></div>    
+                <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full"><i class="fas fa-location-dot text-[10px] text-[#800000]"></i><span class="text-[11px] font-bold text-slate-700">Jalpaiguri</span></div>    
+                <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full"><i class="fas fa-location-dot text-[10px] text-[#800000]"></i><span class="text-[11px] font-bold text-slate-700">Malda</span></div>    
+            </div>    
+
+            <a href="https://www.google.com/maps" target="_blank" class="map-card-link shadow-lg shadow-maroon-900/20">    
+                <div>    
+                    <span class="text-[10px] font-extrabold uppercase tracking-widest opacity-70 mb-1 block">Visit Our Distribution Hub</span>    
+                    <h4 class="text-lg font-bold">Find us in Siliguri <i class="fas fa-arrow-right text-[10px]"></i></h4>    
+                    <p class="text-xs opacity-80 font-medium">Jalpaiguri, West Bengal</p>    
+                </div>    
+                <i class="fas fa-map-location-dot"></i>    
+            </a>    
+
+            <button onclick="navTo('about.html')" class="w-full mt-6 text-center py-2 text-[#800000] font-bold text-sm border-b-2 border-[#800000]/10 hover:border-[#800000] transition-all">    
+                Read About Us <i class="fas fa-arrow-right text-[10px]"></i>    
+            </button>    
+        </section>    
+    </div>    
+
+    <div id="ratings-section" class="px-4 py-10 bg-slate-50">    
+        <div class="rating-header-container">    
+            <div><h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Feedback</h4><h2 class="text-2xl font-bold text-slate-900">Ratings & Reviews</h2></div>    
+            <button onclick="openReviews()" class="view-all-link">View All</button>    
+        </div>    
+        <div class="flex justify-center mb-10">    
+            <div class="rating-3d-card">    
+                <div class="flex items-center justify-center gap-2">    
+                    <span id="avg-rating-display" class="text-4xl font-black text-[#800000]">0.0</span>    
+                    <div class="text-left">    
+                        <div class="flex text-amber-400 text-xs"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>    
+                        <p id="total-reviews-count" class="text-[10px] font-bold text-slate-400 mt-0.5">0 Reviews</p>    
+                    </div>    
+                </div>    
+            </div>    
+        </div>    
+        <div class="swiper reviewSwiper mb-6">    
+            <div class="swiper-wrapper" id="reviews-track"></div>    
+        </div>    
+        <button onclick="navTo('support.html#rating-section')" class="w-full bg-[#1e293b] text-white py-4 rounded-2xl font-bold text-sm shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2">    
+            <i class="fas fa-pen-fancy text-xs"></i> Write a Customer Review    
+        </button>    
+    </div>    
+</div> <footer class="bg-slate-900 pt-12 pb-[100px] w-full text-slate-300 relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-[#800000] rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
+        
+        <div class="relative z-10 px-6 max-w-md mx-auto">
+                        <div class="flex flex-col items-start text-left mb-8">
+                <h2 class="text-2xl font-black text-white tracking-widest font-['Montserrat'] mb-3 flex items-center gap-2">
+                    <i class="fas fa-fish text-[#800000]"></i> GR FISHES
+                </h2>
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                    Delivering premium, chemical-free fresh water and sea fish straight to your kitchen. Quality and hygiene guaranteed since 2026.
+                </p>
+            </div>
+
+            <div class="flex justify-center gap-5 mb-10">
+                <a href="javascript:void(0)" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-500 hover:text-white transition-all active:scale-90 shadow-lg border border-slate-700">
+                    <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="javascript:void(0)" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-[#1877F2] hover:text-white transition-all active:scale-90 shadow-lg border border-slate-700">
+                    <i class="fab fa-facebook-f text-xl"></i>
+                </a>
+                <a href="javascript:void(0)" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-[#25D366] hover:text-white transition-all active:scale-90 shadow-lg border border-slate-700">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8 mb-8 border-t border-b border-slate-800/60 py-8 text-center">
+                <div>
+                    <h4 class="text-white text-xs font-bold mb-4 uppercase tracking-widest">Explore</h4>
+                    <ul class="space-y-3 text-[11px] font-medium text-slate-400">
+                        <li><a href="javascript:void(0)" onclick="navTo('index.html')" class="hover:text-white transition-colors">Home Page</a></li>
+                        <li><a href="javascript:void(0)" onclick="navTo('search.html')" class="hover:text-white transition-colors">Search Catalog</a></li>
+                        <li><a href="javascript:void(0)" onclick="navTo('about.html')" class="hover:text-white transition-colors">Our Story</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white text-xs font-bold mb-4 uppercase tracking-widest">Help & Info</h4>
+                    <ul class="space-y-3 text-[11px] font-medium text-slate-400">
+                        <li><a href="javascript:void(0)" onclick="navTo('support.html')" class="hover:text-white transition-colors">Support & FAQ</a></li>
+                        <li><a href="javascript:void(0)" onclick="navTo('orders.html')" class="hover:text-white transition-colors">Track Order</a></li>
+                        <li><a href="javascript:void(0)" onclick="navTo('login.html')" class="hover:text-white transition-colors">My Profile</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 text-[11px] items-center text-slate-400 mb-8 bg-slate-800/30 p-4 rounded-2xl border border-slate-700/30">
+                <p class="flex items-center gap-2 text-center leading-snug"><i class="fas fa-map-marker-alt text-[#800000] shrink-0"></i> Delivering to Siliguri, Jalpaiguri, Binnaguri & Malda</p>
+                <p class="flex items-center gap-2"><i class="fas fa-envelope text-emerald-500 shrink-0"></i> support@grfishes.com</p>
+            </div>
+
+            <div class="flex flex-col items-center justify-center text-center">
+                <div class="flex items-center gap-2 text-slate-500 text-[9px] font-black uppercase tracking-[2px] mb-3">
+                    <i class="fas fa-shield-alt text-emerald-600"></i> 100% Secure Checkout
+                </div>
+                <p class="text-[9px] text-slate-600 font-medium tracking-wide">© 2026 GR FISHES. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+    </div>    <div id="all-reviews-modal">    
+    <div class="modal-header-premium">    
+        <button onclick="closeReviews()" class="w-10 h-10 flex items-center justify-center bg-slate-100 rounded-full">    
+            <i class="fas fa-chevron-left text-slate-600"></i>    
+        </button>    
+        <div>    
+            <h3 class="font-bold text-lg text-slate-900">Customer Stories</h3>    
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Everything they say about us</p>    
+        </div>    
+    </div>    
+    <div class="reviews-scroll-area" id="modal-reviews-list"></div>    
+</div>    <div id="story-modal" class="fixed inset-0 z-[9999] bg-zinc-900 hidden flex-col transition-all duration-300">  
+    <div class="w-full flex gap-1 p-2 pt-4" id="story-progress-container"></div>  
+    <div class="flex justify-between items-center px-4 py-2 text-white">  
+        <div class="flex items-center gap-2">  
+            <img id="story-header-img" class="w-9 h-9 rounded-full border-2 border-white object-cover">  
+            <div>  
+                <span id="story-header-title" class="font-bold text-sm block"></span>  
+                <span class="text-[10px] opacity-70 tracking-widest uppercase">Best Seller</span>  
+            </div>  
+        </div>  
+        <button onclick="closeStory()" class="text-white text-2xl active:scale-90"><i class="fas fa-times"></i></button>  
+    </div>  <div class="flex-1 relative flex flex-col bg-white rounded-t-3xl mt-3 overflow-hidden">  
+    <img id="story-main-img" class="w-full h-1/2 object-cover">  
+    <div class="p-6 flex-1 flex flex-col justify-between">  
+        <div>  
+            <h2 id="story-title" class="text-2xl font-black text-slate-900 leading-tight"></h2>  
+            <p id="story-desc" class="text-slate-500 text-sm mt-2"></p>  
+            <div id="story-specs" class="text-xs font-bold text-[#800000] mt-3 bg-red-50 px-3 py-1.5 rounded-full inline-flex border border-red-100 items-center gap-2"></div>  
+        </div>  
+          
+        <div class="mt-auto pb-4">  
+            <div class="flex items-end justify-between mb-5">  
+                <div>  
+                    <p class="text-xs font-bold text-slate-400 line-through" id="story-old-price"></p>  
+                    <p class="text-3xl font-black text-slate-900 leading-none" id="story-price"></p>  
+                </div>  
+                <div class="qty-box !w-28 border border-slate-200" id="story-qty-container">  
+                    </div>  
+            </div>  
+            <button id="story-add-btn" class="add-btn-premium text-lg py-3.5 shadow-xl">ADD TO CART</button>  
+        </div>  
+    </div>  
+</div>
+
+</div>  <div id="floating-cart" onclick="navTo('cart.html')"><div class="savings-banner"><i class="fas fa-tag"></i><span>YOU SAVED <span id="total-saved-popup">₹0</span> ON THIS ORDER</span></div><div class="cart-main-info"><div class="text-sm font-bold"><span id="popup-item-count">0</span> ITEM | <span id="popup-total-price">₹0</span></div><div class="flex items-center gap-2 font-black text-sm uppercase tracking-widest">View Cart <i class="fas fa-arrow-right text-xs"></i></div></div></div>    <nav class="bottom-nav">    
+    <a href="javascript:void(0)" onclick="navTo('index.html')" class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></a>    
+    <a href="javascript:void(0)" onclick="navTo('orders.html')" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg><span>Orders</span></a>    
+    <a href="javascript:void(0)" onclick="navTo('support.html')" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-2.2 2.2a15.045 15.045 0 0 1-6.59-6.59l2.2-2.21a.96.96 0 0 0 .25-1.01c-.36-1.11-.56-2.3-.56-3.53 0-.55-.45-1-1-1H3.03c-.55 0-1 .45-1 1C2.03 12.38 11.62 21.97 20.01 21.97c.55 0 1-.45 1-1v-4.59c0-.55-.45-1-1-1z"/></svg><span>Support</span></a>    
+    <a href="javascript:void(0)" onclick="navTo('login.html')" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Profile</span></a>    
+</nav>    <script>    
+/* --- SMART PHONE BACK BUTTON & SCROLL RESTORATION --- */    
+(function() {    
+    const isHome = window.location.href.includes('index.html') || window.location.pathname.endsWith('/');    
+    if (!isHome) {    
+        history.pushState(null, null, location.href);    
+        window.onpopstate = function () {    
+            window.location.replace("./index.html");    
+        };    
+    }    
+    if (isHome) {    
+        window.addEventListener('load', () => {    
+            const savedPos = localStorage.getItem('gr_home_scroll');    
+            if (savedPos && savedPos !== "0") {    
+                let attempts = 0;    
+                const scrollFix = setInterval(() => {    
+                    window.scrollTo(0, parseInt(savedPos));    
+                    attempts++;    
+                    if (attempts > 15) {    
+                        clearInterval(scrollFix);    
+                        localStorage.setItem('gr_home_scroll', '0');    
+                    }    
+                }, 100);    
+
+                const stopScrollFight = () => {
+                    clearInterval(scrollFix);
+                    localStorage.setItem('gr_home_scroll', '0');
+                };
+
+                window.addEventListener('touchstart', stopScrollFight, { once: true });
+                window.addEventListener('wheel', stopScrollFight, { once: true });
+            }    
+        });    
+    }    
+})();    
+  
+const fishData = [  
+{ id:"P1", name:"Freshwater Prawns (Medium)", cat:"crabs", imgs:["https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=600","https://images.unsplash.com/photo-1625944525903-b1dcb0c2c0df?w=600","https://images.unsplash.com/photo-1604908176997-4318e3d7d8d8?w=600"], price:425, oldPrice:479, weight:"250 g", pieces:"20-30 Pieces", serves:"Serves 2-3", desc:"Eral/Etti/Chemmeen" },  
+{ id:"P2", name:"Tiger Prawns (Large)", cat:"crabs", imgs:["https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600","https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600","https://images.unsplash.com/photo-1625938145744-e380c2d3f7c4?w=600"], price:899, oldPrice:1050, weight:"500 g", pieces:"6-10 Pieces", serves:"Serves 3-4", desc:"Premium Jumbo Prawns" },  
+{ id:"P3", name:"Mud Crab (Kankra)", cat:"crabs", imgs:["https://images.unsplash.com/photo-1617196038435-0c0b8c2d4c77?w=600","https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600","https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600"], price:780, oldPrice:900, weight:"500 g", pieces:"2-3 Pieces", serves:"Serves 2-3", desc:"Fresh Live Crab" },  
+{ id:"F1", name:"Padma Rohu (রহू)", cat:"fresh", imgs:["https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=600","https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600","https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600"], price:550, oldPrice:620, weight:"500 g", pieces:"8-10 Pieces", serves:"Serves 3-4", desc:"Premium River Fish" },  
+{ id:"F2", name:"River Catla (কটলা)", cat:"fresh", imgs:["https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=600","https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600","https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600"], price:600, oldPrice:680, weight:"500 g", pieces:"6-8 Pieces", serves:"Serves 3", desc:"River Caught Catla" },  
+{ id:"F3", name:"Hilsa (ইলিশ)", cat:"fresh", imgs:["https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600","https://images.unsplash.com/photo-1611175694980-5c3d1d9c7a2f?w=600","https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600"], price:1200, oldPrice:1400, weight:"500 g", pieces:"4-6 Pieces", serves:"Serves 3", desc:"King of Fish (Premium Hilsa)" },  
+{ id:"F4", name:"Tilapia (তেলাপিয়া)", cat:"fresh", imgs:["https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=600","https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600","https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600"], price:280, oldPrice:320, weight:"500 g", pieces:"6-8 Pieces", serves:"Serves 2-3", desc:"Budget Fresh Fish" },  
+{ id:"S1", name:"White Pomfret", cat:"sea", imgs:["https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600","https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600","https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600"], price:950, oldPrice:1100, weight:"500 g", pieces:"2-4 Pieces", serves:"Serves 2", desc:"Premium Sea Delicacy" },  
+{ id:"S2", name:"Bhetki (Sea Bass)", cat:"sea", imgs:["https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=600","https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600","https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600"], price:720, oldPrice:820, weight:"500 g", pieces:"4-6 Pieces", serves:"Serves 3", desc:"Boneless Fillet Fish" },  
+{ id:"S3", name:"Indian Mackerel (Bangda)", cat:"sea", imgs:["https://images.unsplash.com/photo-1544025162-d76694265947?w=600","https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600","https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600"], price:350, oldPrice:420, weight:"500 g", pieces:"6-10 Pieces", serves:"Serves 3", desc:"Oily & Healthy Fish" }  
+];  
+  
+let cart = JSON.parse(localStorage.getItem('gr_fishes_cart')) || [];    
+
+/* --- NEW: SORT & FILTER LOGIC --- */
+let currentSortMode = 'top_selling';
+let currentCategoryMode = 'all';
+
+function toggleSortDropdown() {
+    document.getElementById('sort-dropdown').classList.toggle('show');
+}
+
+window.addEventListener('click', function(e) {
+    if (document.getElementById('sort-container') && !document.getElementById('sort-container').contains(e.target)) {
+        document.getElementById('sort-dropdown').classList.remove('show');
+    }
+});
+
+function getSalesMap() {
+    let orders = JSON.parse(localStorage.getItem('gr_orders')) || [];  
+    let realSalesData = {};  
+    fishData.forEach(f => { realSalesData[f.id] = 0; });  
+    orders.forEach(order => {  
+        if (order.items && Array.isArray(order.items)) {  
+            order.items.forEach(item => {  
+                if (realSalesData[item.id] !== undefined) {  
+                    realSalesData[item.id] += item.qty;  
+                }  
+            });  
+        }  
+    });
+    return realSalesData;
+}
+
+function applySort(type, label) {
+    currentSortMode = type;
+    document.getElementById('current-sort-label').innerText = label;
+    document.getElementById('sort-dropdown').classList.remove('show');
+    
+    const radios = document.querySelectorAll('.radio-circle');
+    radios.forEach(r => r.classList.remove('active'));
+    document.getElementById('radio-' + type).classList.add('active');
+
+    refreshCatalog();
+}
+
+function refreshCatalog() {
+    let filteredData = currentCategoryMode === 'all' 
+        ? [...fishData] 
+        : fishData.filter(f => f.cat === currentCategoryMode);
+
+    let salesMap = getSalesMap();
+
+    filteredData.sort((a, b) => {
+        if (currentSortMode === 'top_selling') {
+            return salesMap[b.id] - salesMap[a.id];
+        } else if (currentSortMode === 'price_low') {
+            return a.price - b.price;
+        } else if (currentSortMode === 'price_high') {
+            return b.price - a.price;
+        } else if (currentSortMode === 'discount') {
+            let pA = Math.round(((a.oldPrice - a.price) / a.oldPrice) * 100);
+            let pB = Math.round(((b.oldPrice - b.price) / b.oldPrice) * 100);
+            return pB - pA;
+        }
+        return 0;
+    });
+
+    renderCatalog(filteredData);
+}
+/* --- END SORT & FILTER LOGIC --- */
+  
+/* --- REAL DATA INSTAGRAM STORY LOGIC --- */  
+function getTopSellers() {  
+    let orders = JSON.parse(localStorage.getItem('gr_orders')) || [];  
+    let realSalesData = {};  
+      
+    fishData.forEach(f => { realSalesData[f.id] = 0; });  
+  
+    orders.forEach(order => {  
+        if (order.items && Array.isArray(order.items)) {  
+            order.items.forEach(item => {  
+                if (realSalesData[item.id] !== undefined) {  
+                    realSalesData[item.id] += item.qty;  
+                }  
+            });  
+        }  
+    });  
+  
+    return [...fishData].sort((a, b) => realSalesData[b.id] - realSalesData[a.id]).slice(0, 10);  
+}  
+  
+function renderStories() {  
+    const topSellers = getTopSellers();  
+    const container = document.getElementById('stories-container');  
+      
+    container.innerHTML = topSellers.map(f => `  
+                <div class="flex flex-col items-center gap-1 cursor-pointer active:scale-95 transition-transform" onclick="openStory('${f.id}')">  
+            <div class="w-[72px] h-[72px] rounded-full p-[1.5px] story-border-gradient shrink-0">  
+                <img src="${f.imgs[0]}" onerror="this.src='https://placehold.co/600x400/f8fafc/800000?text=GR+Fishes'" class="w-full h-full rounded-full border-[1.5px] border-white object-cover shadow-sm">  
+            </div>  
+            <span class="story-name-text text-[10px] leading-[1.2] text-slate-600 font-medium w-[84px] px-1 text-center mt-1">${f.name}</span>  
+  
+        </div>  
+    `).join('');  
+}  
+  
+let storyTimer;  
+function openStory(id) {  
+    const fish = fishData.find(f => f.id === id);  
+    const modal = document.getElementById('story-modal');  
+      
+    modal.classList.remove('hidden');  
+    modal.classList.add('flex');  
+    document.body.style.overflow = 'hidden';  
+      
+    // Inject Data  
+    document.getElementById('story-header-img').src = fish.imgs[0];  
+    document.getElementById('story-header-title').innerText = fish.name;  
+    document.getElementById('story-main-img').src = fish.imgs[0];  
+    document.getElementById('story-title').innerText = fish.name;  
+    document.getElementById('story-desc').innerText = fish.desc;  
+    document.getElementById('story-specs').innerHTML = `<i class="fas fa-box-open"></i> ${fish.weight} | ${fish.pieces} | ${fish.serves}`;  
+    document.getElementById('story-old-price').innerText = `₹${fish.oldPrice}`;  
+    document.getElementById('story-price').innerText = `₹${fish.price}`;  
+      
+    document.getElementById('story-qty-container').innerHTML = `  
+        <div class="qty-btn" onclick="updateStoryQty('${fish.id}', -1)">-</div>    
+        <input type="text" id="qty-story-${fish.id}" value="1" readonly class="qty-input !w-10">    
+        <div class="qty-btn" onclick="updateStoryQty('${fish.id}', 1)">+</div>    
+    `;  
+      
+    document.getElementById('story-add-btn').onclick = () => addWithFeedbackStory(fish.id);  
+      
+    const progress = document.getElementById('story-progress-container');  
+    progress.innerHTML = `<div class="h-[3px] bg-white/30 rounded-full w-full overflow-hidden"><div class="h-full bg-white w-0 animate-[storyProgress_10s_linear_forwards]"></div></div>`;  
+      
+    clearTimeout(storyTimer);  
+    storyTimer = setTimeout(closeStory, 10000);  
+}  
+  
+function closeStory() {  
+    document.getElementById('story-modal').classList.add('hidden');  
+    document.getElementById('story-modal').classList.remove('flex');  
+    document.body.style.overflow = 'auto';  
+    clearTimeout(storyTimer);  
+}  
+  
+function updateStoryQty(id, delta) {  
+    const input = document.getElementById(`qty-story-${id}`);  
+    let currentVal = parseInt(input.value);  
+    let newVal = currentVal + delta;  
+    if (newVal >= 1) input.value = newVal;  
+}  
+  
+function addWithFeedbackStory(id) {  
+    const input = document.getElementById(`qty-story-${id}`);  
+    const btn = document.getElementById('story-add-btn');  
+    const fish = fishData.find(f => f.id === id);  
+    const qty = parseInt(input.value);  
+      
+    const existingIndex = cart.findIndex(c => c.id === id);  
+    if (qty > 0) {  
+        if (existingIndex > -1) cart[existingIndex].qty += qty;  
+        else cart.push({ ...fish, qty: qty });  
+          
+        btn.innerText = "ADDED TO CART √";  
+        btn.classList.add("added-success");  
+        setTimeout(() => {  
+            btn.innerText = "ADD TO CART";  
+            btn.classList.remove("added-success");  
+            input.value = 1;  
+            closeStory();  
+        }, 800);  
+        saveAndRefresh();  
+    }  
+}  
+/* --- END STORY LOGIC --- */  
+
+function renderCatalog(data = fishData) {    
+    const grid = document.getElementById('grid-catalog');    
+    const counterDisplay = document.getElementById('total-item-count');    
+    if (counterDisplay) counterDisplay.innerText = `${data.length} items available`;    
+        
+    grid.innerHTML = data.map(f => {    
+        const discountPercent = Math.round(((f.oldPrice - f.price) / f.oldPrice) * 100);    
+        return `    
+                                <div class="product-card border border-slate-100 shadow-[0_12px_40px_rgba(0,0,0,0.15)]">
+    
+            <div class="product-image-container relative !h-[170px]">    
+                <div class="swiper productSwiper-${f.id} w-full h-full bg-slate-50 cursor-pointer" onclick="if(this.swiper) this.swiper.slideNext();">
+                    <div class="swiper-wrapper">
+                        ${f.imgs.map(img => `
+                            <div class="swiper-slide w-full h-full">
+                                <img src="${img}" onerror="this.src='https://placehold.co/600x400/f8fafc/800000?text=GR+Fishes'" class="w-full h-full object-cover object-center">
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex justify-center items-center gap-1.5 z-10 pointer-events-none bg-white/90 backdrop-blur shadow-sm px-3 py-1.5 rounded-full" id="dots-${f.id}">
+                        ${f.imgs.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-[#800000] scale-125' : 'bg-slate-300'}"></div>`).join('')}
+                    </div>
+                </div>    
+                <div class="indicator-tag"><div class="indicator-dot"></div></div>    
+            </div>    
+            <div class="p-4">    
+                <h3 class="text-[16px] font-medium text-slate-800 leading-snug break-words whitespace-normal">${f.name}</h3>  
+                <p class="text-[12px] text-slate-500 mt-1">${f.desc}</p>  
+                
+                <div class="text-[11px] font-medium mt-2 flex items-center gap-1.5">
+                    <span class="bg-slate-100 px-2 py-0.5 rounded text-slate-600">${f.weight}</span> 
+                    <span class="bg-slate-100 px-2 py-0.5 rounded text-slate-600">${f.pieces}</span> 
+                    <span class="bg-red-50 px-2 py-0.5 rounded text-[#800000]">${f.serves}</span>
+                </div>
+
+                <div class="flex items-end justify-between mt-5">    
+                    <div class="flex flex-col justify-center">    
+                        <div class="flex items-center gap-2">    
+                            <span class="text-[18px] font-semibold text-slate-900 leading-none">₹${f.price}</span>    
+                            <span class="text-[13px] text-slate-400 line-through leading-none">₹${f.oldPrice}</span>    
+                        </div>  
+                        <span class="text-[11px] font-medium text-emerald-600 mt-1.5">${discountPercent}% OFF</span>
+                    </div>    
+                        
+                    <div class="flex flex-col items-end w-28">    
+                        <div class="qty-box !bg-slate-50 !mb-2">    
+                            <div class="qty-btn !text-slate-600 !text-sm" onclick="updateItemQty('${f.id}', -1); event.stopPropagation();"><i class="fas fa-minus"></i></div>    
+                            <input type="text" id="qty-${f.id}" value="1" readonly class="qty-input !font-medium">    
+                            <div class="qty-btn !text-[#800000] !text-sm" onclick="updateItemQty('${f.id}', 1); event.stopPropagation();"><i class="fas fa-plus"></i></div>    
+                        </div>    
+                        <button id="btn-${f.id}" onclick="addWithFeedback('${f.id}'); event.stopPropagation();" class="add-btn-premium active:scale-95 transition-all">ADD</button>    
+                    </div>    
+                </div>    
+            </div>    
+        </div>
+`;    
+    }).join('');    
+    
+    setTimeout(() => {
+        data.forEach(f => {
+            new Swiper(`.productSwiper-${f.id}`, {
+                loop: true,
+                grabCursor: true,
+                on: {
+                    slideChange: function () {
+                        const realIndex = this.realIndex;
+                        const dotsContainer = document.getElementById(`dots-${f.id}`);
+                        if (dotsContainer) {
+                            Array.from(dotsContainer.children).forEach((dot, idx) => {
+                                dot.className = idx === realIndex 
+                                    ? "w-1.5 h-1.5 rounded-full transition-all duration-300 bg-[#800000] scale-125" 
+                                    : "w-1.5 h-1.5 rounded-full transition-all duration-300 bg-slate-300";
+                            });
+                        }
+                    }
+                }
+            });
+        });
+    }, 50);
+}    
+  
+function updateItemQty(id, delta) {    
+    const input = document.getElementById(`qty-${id}`);    
+    const btn = document.getElementById(`btn-${id}`);    
+    let currentVal = parseInt(input.value);    
+    let newVal = currentVal + delta;    
+  
+    const inCart = cart.some(c => c.id === id);    
+  
+    if (inCart) {    
+        if (newVal >= 0) {    
+            input.value = newVal;    
+            if (newVal === 0) {    
+                btn.innerText = "REMOVE";    
+                btn.className = "add-btn-premium btn-remove";    
+            }     
+            else {    
+                btn.innerText = "UPDATE";    
+                btn.className = "add-btn-premium";    
+            }    
+        }    
+    } else {    
+        if (newVal >= 1) {    
+            input.value = newVal;    
+        }    
+    }    
+}    
+  
+function addWithFeedback(id) {    
+    const input = document.getElementById(`qty-${id}`);    
+    const btn = document.getElementById(`btn-${id}`);    
+    const fish = fishData.find(f => f.id === id);    
+    const qty = parseInt(input.value);    
+    const existingIndex = cart.findIndex(c => c.id === id);    
+  
+    if (qty === 0) {    
+        if (existingIndex > -1) { cart.splice(existingIndex, 1); }    
+        btn.innerText = "REMOVED √";    
+        btn.className = "add-btn-premium added-success";     
+        setTimeout(() => {    
+            input.value = 1;    
+            btn.innerText = "ADD +";    
+            btn.className = "add-btn-premium";    
+            saveAndRefresh();    
+        }, 1000);    
+    } else if (existingIndex > -1) {    
+        cart[existingIndex].qty = qty;    
+        btn.innerText = "UPDATED √";    
+        btn.className = "add-btn-premium added-success";    
+        setTimeout(() => {    
+            btn.innerText = "ADD +";    
+            btn.className = "add-btn-premium";    
+            saveAndRefresh();    
+        }, 1000);    
+    } else {    
+        cart.push({ ...fish, qty: qty });    
+        btn.innerText = "ADDED √";    
+        btn.className = "add-btn-premium added-success";    
+        setTimeout(() => {    
+            btn.innerText = "ADD +";    
+            btn.className = "add-btn-premium";    
+            saveAndRefresh();    
+        }, 1000);    
+    }    
+}    
+  
+function saveAndRefresh() {    
+    cart = cart.filter(item => item.qty > 0);    
+    localStorage.setItem('gr_fishes_cart', JSON.stringify(cart));    
+    updateCartBadge();    
+    updateFloatingCart();    
+}    
+  
+function updateCartBadge() {    
+    const badge = document.getElementById('cart-badge');    
+    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);    
+    if (totalItems > 0) { badge.innerText = totalItems; badge.classList.remove('hidden'); } else badge.classList.add('hidden');    
+}    
+  
+function updateFloatingCart() {    
+    const popup = document.getElementById('floating-cart');    
+    if (cart.length === 0) { popup.style.display = 'none'; return; }    
+    popup.style.display = 'flex';    
+    let totalItems = 0; let totalPrice = 0; let totalSavings = 0;    
+    cart.forEach(item => {    
+        totalItems += item.qty;    
+        totalPrice += (item.price * item.qty);    
+        totalSavings += (item.oldPrice - item.price) * item.qty;    
+    });    
+    document.getElementById('popup-item-count').innerText = totalItems;    
+    document.getElementById('popup-total-price').innerText = `₹${totalPrice}`;    
+    document.getElementById('total-saved-popup').innerText = `₹${totalSavings}`;    
+}    
+  
+/* --- UPDATED TO MATCH LIGHT THEME --- */
+function filterCategory(cat) {    
+    currentCategoryMode = cat;
+    const btns = document.querySelectorAll('.cat-btn'), 
+          bs = document.getElementById('banner-slider'), 
+          hc = document.getElementById('home-content'), 
+          about = document.getElementById('about-section-container'), 
+          ratings = document.getElementById('ratings-section'), 
+          stories = document.getElementById('top-selling-stories');    
+    
+    // Reset all buttons: White bg, Black border, No shadow
+    btns.forEach(btn => { 
+        btn.classList.remove('bg-[#800000]', 'text-white', 'shadow-sm', 'shadow-[#800000]/20', 'border-[#800000]', 'border-slate-300'); 
+        btn.classList.add('bg-white', 'text-slate-700', 'border-black'); 
+    });    
+    
+    // Set Active button: Maroon bg, Black border, No shadow
+    if(event) { 
+        event.currentTarget.classList.remove('bg-white', 'text-slate-700', 'border-black'); 
+        event.currentTarget.classList.add('bg-[#800000]', 'text-white', 'border-black'); 
+    }    
+    
+    hc.classList.add('page-hidden');    
+    setTimeout(() => {    
+        if (cat === 'all') { 
+            bs.style.display = 'block'; 
+            stories.style.display = 'block'; 
+            if(about) about.style.display = 'block'; 
+            if(ratings) ratings.style.display = 'block'; 
+        } else { 
+            bs.style.display = 'none'; 
+            stories.style.display = 'none'; 
+            if(about) about.style.display = 'none'; 
+            if(ratings) ratings.style.display = 'none'; 
+            window.scrollTo({ top: 0, behavior: 'auto' }); 
+        }    
+        refreshCatalog();    
+        setTimeout(() => hc.classList.remove('page-hidden'), 50);    
+    }, 300);     
+}
+    
+  
+const defaultReviews = [    
+    { name: "Anirban Ghosh", rating: 5, msg: "The Padma Rohu was incredibly fresh. Best quality fish delivery in Siliguri!" },    
+    { name: "Roni Rabidas", rating: 5, msg: "Timely delivery in Binnaguri. Very happy with the packaging and hygiene." },    
+    { name: "Suman Das", rating: 4, msg: "Malda delivery was express fast! The Hilsa quality was premium." }    
+];    
+  
+function initReviews() {    
+    let stored = JSON.parse(localStorage.getItem('gr_reviews')) || [];    
+    let reviews = [...stored, ...defaultReviews];    
+    const total = reviews.length;    
+    const avg = total === 0 ? "0.0" : (reviews.reduce((acc, curr) => acc + curr.rating, 0) / total).toFixed(1);    
+    document.getElementById('avg-rating-display').innerText = avg;    
+    document.getElementById('total-reviews-count').innerText = `${total} Reviews`;    
+    const track = document.getElementById('reviews-track');    
+    track.innerHTML = reviews.map(r => `    
+        <div class="swiper-slide"><div class="review-pill"><div class="flex items-center gap-1">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star ${i < r.rating ? 'star-filled' : 'text-slate-200'}"></i>`).join('')}</div><p class="review-text">"${r.msg}"</p><div class="flex items-center gap-2"><div class="w-7 h-7 bg-slate-100 rounded-full flex items-center justify-center text-[10px] font-bold text-[#800000] border border-slate-200">${r.name.charAt(0)}</div><span class="text-[11px] font-bold text-slate-800">${r.name}</span></div></div></div>    
+    `).join('');    
+    new Swiper('.reviewSwiper', { slidesPerView: 1.3, spaceBetween: 20, loop: reviews.length > 1, autoplay: { delay: 3500, disableOnInteraction: false } });    
+}    
+  
+function openReviews() {    
+    const modal = document.getElementById('all-reviews-modal');    
+    const list = document.getElementById('modal-reviews-list');    
+    let stored = JSON.parse(localStorage.getItem('gr_reviews')) || [];    
+    let reviews = [...stored, ...defaultReviews];    
+    list.innerHTML = reviews.map(r => `    
+        <div class="full-review-card"><div class="flex justify-between items-start mb-3"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#800000] rounded-full flex items-center justify-center text-xs font-bold text-white">${r.name.charAt(0)}</div><div><h4 class="text-sm font-bold text-slate-800">${r.name}</h4><div class="flex text-[10px] text-amber-400">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star ${i < r.rating ? '' : 'text-slate-200'}"></i>`).join('')}</div></div></div><span class="text-[9px] font-black text-slate-300 uppercase tracking-tighter">Verified Order</span></div><p class="text-xs text-slate-500 leading-relaxed italic">"${r.msg}"</p></div>    
+    `).join('');    
+    modal.style.display = 'flex';    
+    document.body.style.overflow = 'hidden';    
+}    
+  
+function closeReviews() { document.getElementById('all-reviews-modal').style.display = 'none'; document.body.style.overflow = 'auto'; }    
+  
+let imageIndexMap = {};  
+  
+function changeImg(id, direction) {  
+    const fish = fishData.find(f => f.id === id);  
+    if (!imageIndexMap[id]) imageIndexMap[id] = 0;  
+    imageIndexMap[id] += direction;  
+    
+    if (imageIndexMap[id] < 0) imageIndexMap[id] = fish.imgs.length - 1;  
+    if (imageIndexMap[id] >= fish.imgs.length) imageIndexMap[id] = 0;  
+      
+    const imgEl = document.getElementById(`img-${id}`);  
+    imgEl.src = fish.imgs[imageIndexMap[id]];  
+    imgEl.onerror = function() { this.src = 'https://placehold.co/600x400/f8fafc/800000?text=GR+Fishes'; };  
+
+    const dotsContainer = document.getElementById(`dots-${id}`);
+    if (dotsContainer) {
+        Array.from(dotsContainer.children).forEach((dot, idx) => {
+            dot.className = idx === imageIndexMap[id] 
+                ? "w-1.5 h-1.5 rounded-full transition-all duration-300 bg-white shadow-sm scale-110" 
+                : "w-1.5 h-1.5 rounded-full transition-all duration-300 bg-white/50";
+        });
+    }
+}  
+  
+new Swiper('.heroSwiper', { loop: true, speed: 1000, autoplay: { delay: 3000, disableOnInteraction: false }, grabCursor: true });    
+  
+/* --- INITIALIZATION --- */  
+renderStories();   
+refreshCatalog(); 
+updateCartBadge();   
+updateFloatingCart();   
+initReviews();    
+checkLoginStatus();    
+  
+window.addEventListener('pageshow', function(event) {  
+    if(event.persisted || performance.getEntriesByType("navigation")[0].type === 'back_forward') {  
+        renderStories();   
+    }  
+});  
+  
+window.addEventListener('click', (e) => {     
+    if (!e.target.closest('#user-menu-container')) {     
+        document.getElementById('user-dropdown')?.classList.add('hidden');     
+    }     
+});    
+  
+window.addEventListener('storage', (e) => {    
+    if (e.key === 'gr_users') checkLoginStatus();   
+    if (e.key === 'gr_orders') renderStories();   
+});  
+</script>  
+</body>    
+</html>

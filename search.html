@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Search Results - GR Fishes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        body { font-family: 'Lato', sans-serif; background-color: #f8fafc; }
+        .refresh-active { opacity: 0; transform: scale(0.98); transition: all 0.4s ease; }
+
+        @keyframes professionalSlide {
+            0% { transform: translateY(-15px); opacity: 0; }
+            15% { transform: translateY(0); opacity: 1; }
+            85% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(15px); opacity: 0; }
+        }
+        #slidingBlock { display: inline-flex; animation: professionalSlide 4s infinite; color: #475569; }
+
+        #clearSearch { width: 5vw; height: 5vw; color: #94a3b8; display: none; align-items: center; justify-content: center; font-size: 4.5vw; cursor: pointer; }
+
+        .result-card { 
+            display: flex; padding: 4vw; margin: 3vw 4vw; background: white; border-radius: 5vw;
+            gap: 3vw; align-items: center; border: 1px solid #e2e8f0;
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1), 0 10px 15px -5px rgba(0, 0, 0, 0.05);
+            border-bottom: 1.2vw solid #e2e8f0; transition: all 0.2s ease;
+        }
+        
+        .result-info { flex: 1; border-right: 1px dashed #e2e8f0; padding-right: 2vw; }
+        .result-info h4 { font-family: 'Montserrat', sans-serif; font-size: 4.2vw !important; font-weight: 600; }
+        .result-img-container { width: 32vw; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+        .result-img { width: 100%; height: 25vw; object-fit: cover; border-radius: 4vw; margin-bottom: 2vw; }
+        
+        .qty-box { display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 2vw; padding: 0.5vw; margin-bottom: 2.5vw; width: 100%; }
+        .qty-btn { width: 8vw; height: 8vw; display: flex; align-items: center; justify-content: center; color: #800000; font-size: 4.5vw; font-weight: 900; }
+        .qty-input { width: 8vw; text-align: center; background: transparent; font-weight: 800; font-size: 3.5vw; color: #1e293b; pointer-events: none; }
+
+        .add-btn-small { 
+            background: #d11243; color: white; padding: 2vw 0; border-radius: 2.5vw; font-weight: 800; 
+            font-size: 3.2vw; width: 100%; box-shadow: 0 6px 15px rgba(209,18,67,0.4); 
+            border-bottom: 0.8vw solid #9c0d32; transition: all 0.1s;
+        }
+
+        /* FIXED: Professional Remove Button Colour */
+        .btn-remove { background: #475569 !important; border-bottom-color: #1e293b !important; box-shadow: 0 6px 15px rgba(71,85,105,0.3) !important; }
+        .add-btn-small.added-success { background: #22c55e !important; border-bottom-color: #166534 !important; }
+
+        #results-header { padding: 12px 16px 5px 16px; font-style: normal !important; }
+        #live-counter { font-style: normal !important; font-weight: 600; letter-spacing: 0.5px; }
+        #results-list { padding-top: 0px; margin-top: 0px; }
+        
+        .specs-text { font-size: 2.8vw; color: #64748b; font-weight: 700; display: flex; align-items: center; gap: 1vw; }
+        .pill-dark { display: flex; align-items: center; gap: 8px; border: 1.5px solid #1e293b; padding: 10px 18px; border-radius: 9999px; color: #1e293b; font-size: 14px; }
+        .history-pill { display: flex; align-items: center; gap: 8px; background: white; border: 1.5px solid #1e293b; padding: 8px 14px; border-radius: 9999px; color: #1e293b; font-size: 14px; }
+        .remove-btn { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #1e293b; color: #fff; font-size: 8px; }
+
+        /* FIXED: Theme Maroon Floating Cart Popup */
+        #floating-cart {
+            position: fixed; bottom: 25px; left: 15px; right: 15px;
+            background: #800000; color: white; border-radius: 16px;
+            z-index: 2000; display: none; flex-direction: column;
+            box-shadow: 0 10px 25px rgba(128,0,0,0.4); overflow: hidden;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+        .savings-banner { background: #166534; color: #ffffff; padding: 8px 15px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .cart-main-info { padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+            <div class="bg-[#800000] p-4 sticky top-0 z-[1000] shadow-lg">
+        <div class="flex items-center gap-3 bg-white rounded-2xl px-4 py-1">
+            <button onclick="window.location.href='./index.html'" class="text-slate-900 text-lg flex items-center p-2">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="relative flex-grow h-[48px] flex items-center overflow-hidden">
+                <div id="placeholderWrap" class="absolute left-0 pointer-events-none text-base text-slate-400 flex gap-1">
+                    Search <div id="slidingBlock">'<span id="slidingName">Rohu</span>'</div>
+                </div>
+                <input type="text" id="searchInput" oninput="togglePlaceholder()" onkeyup="handleInput(event)" autofocus 
+                    class="w-full bg-transparent text-slate-900 text-base py-3 focus:outline-none z-10">
+                
+                <div class="flex items-center gap-4 z-20 pl-2">
+                    <div id="clearSearch" onclick="clearInput()" class="text-slate-300 w-8 h-8 flex items-center justify-center text-xl active:scale-90 transition-transform">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div onclick="executeSearch(document.getElementById('searchInput').value)" class="text-[#800000] w-8 h-8 flex items-center justify-center text-xl active:scale-90 transition-all opacity-60">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="search-content">
+        <div id="results-header" class="p-5 flex items-center justify-between hidden">
+            <div class="flex items-center gap-2">
+                <span id="live-counter" class="text-slate-900 text-base">0 ITEMS FOUND</span>
+                <div class="h-[2px] w-12 bg-[#800000]"></div>
+            </div>
+            <button class="bg-white border-2 border-slate-900 px-4 py-1.5 rounded-xl text-slate-900 font-black text-xs uppercase tracking-tighter">
+                <i class="fas fa-sliders-h"></i> Filter
+            </button>
+        </div>
+
+        <div id="blank-state" class="p-6">
+            <div id="history-section" class="mb-10 hidden">
+                <div class="flex justify-between items-center mb-5">
+                    <h3 class="text-lg font-black text-slate-900 uppercase">Recent</h3>
+                    <button onclick="clearAllHistory()" class="text-xs text-red-600 font-black underline">CLEAR ALL</button>
+                </div>
+                <div id="search-history" class="flex flex-wrap gap-3"></div>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 uppercase mb-5">Trending</h3>
+            <div class="flex flex-wrap gap-3" id="trending-list"></div>
+        </div>
+
+        <div id="suggestion-box" class="bg-white hidden"></div>
+        
+        <div id="spell-correction" class="hidden px-5 pb-2 text-[3.5vw] text-slate-600"></div>
+
+        <div id="results-list" class="hidden pb-20"></div>
+    </div>
+
+    <div id="floating-cart" onclick="window.location.href='./cart.html'">
+        <div class="savings-banner">
+            <i class="fas fa-tag"></i>
+            <span>YOU SAVED <span id="total-saved-popup">₹0</span> ON THIS ORDER</span>
+        </div>
+        <div class="cart-main-info">
+            <div class="text-sm font-bold">
+                <span id="popup-item-count">0</span> ITEM | <span id="popup-total-price">₹0</span>
+            </div>
+            <div class="flex items-center gap-2 font-black text-sm uppercase tracking-widest">
+                View Cart <i class="fas fa-arrow-right text-xs"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const fishData = [
+
+/* ================= PRAWNS & CRABS ================= */
+{
+id:"P1",
+name:"Freshwater Prawns (Medium)",
+cat:"crabs",
+imgs:[
+"https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=600",
+"https://images.unsplash.com/photo-1625944525903-b1dcb0c2c0df?w=600",
+"https://images.unsplash.com/photo-1604908176997-4318e3d7d8d8?w=600"
+],
+price:425, oldPrice:479,
+weight:"250 g", pieces:"20-30 Pieces",
+serves:"Serves 2-3",
+desc:"Eral/Etti/Chemmeen"
+},
+
+{
+id:"P2",
+name:"Tiger Prawns (Large)",
+cat:"crabs",
+imgs:[
+"https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600",
+"https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600",
+"https://images.unsplash.com/photo-1625938145744-e380c2d3f7c4?w=600"
+],
+price:899, oldPrice:1050,
+weight:"500 g", pieces:"6-10 Pieces",
+serves:"Serves 3-4",
+desc:"Premium Jumbo Prawns"
+},
+
+{
+id:"P3",
+name:"Mud Crab (Kankra)",
+cat:"crabs",
+imgs:[
+"https://images.unsplash.com/photo-1617196038435-0c0b8c2d4c77?w=600",
+"https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600",
+"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600"
+],
+price:780, oldPrice:900,
+weight:"500 g",
+pieces:"2-3 Pieces",
+serves:"Serves 2-3",
+desc:"Fresh Live Crab"
+},
+
+/* ================= FRESH WATER ================= */
+{
+id:"F1",
+name:"Padma Rohu (রহू)",
+cat:"fresh",
+imgs:[
+"https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=600",
+"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600"
+],
+price:550, oldPrice:620,
+weight:"500 g",
+pieces:"8-10 Pieces",
+serves:"Serves 3-4",
+desc:"Premium River Fish"
+},
+
+{
+id:"F2",
+name:"River Catla (কটলা)",
+cat:"fresh",
+imgs:[
+"https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
+"https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600"
+],
+price:600, oldPrice:680,
+weight:"500 g",
+pieces:"6-8 Pieces",
+serves:"Serves 3",
+desc:"River Caught Catla"
+},
+
+{
+id:"F3",
+name:"Hilsa (ইলিশ)",
+cat:"fresh",
+imgs:[
+"https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600",
+"https://images.unsplash.com/photo-1611175694980-5c3d1d9c7a2f?w=600",
+"https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600"
+],
+price:1200, oldPrice:1400,
+weight:"500 g",
+pieces:"4-6 Pieces",
+serves:"Serves 3",
+desc:"King of Fish (Premium Hilsa)"
+},
+
+{
+id:"F4",
+name:"Tilapia (তেলাপিয়া)",
+cat:"fresh",
+imgs:[
+"https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
+"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600"
+],
+price:280, oldPrice:320,
+weight:"500 g",
+pieces:"6-8 Pieces",
+serves:"Serves 2-3",
+desc:"Budget Fresh Fish"
+},
+
+/* ================= SEA FISH ================= */
+{
+id:"S1",
+name:"White Pomfret",
+cat:"sea",
+imgs:[
+"https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600",
+"https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600",
+"https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600"
+],
+price:950, oldPrice:1100,
+weight:"500 g",
+pieces:"2-4 Pieces",
+serves:"Serves 2",
+desc:"Premium Sea Delicacy"
+},
+
+{
+id:"S2",
+name:"Bhetki (Sea Bass)",
+cat:"sea",
+imgs:[
+"https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
+"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600"
+],
+price:720, oldPrice:820,
+weight:"500 g",
+pieces:"4-6 Pieces",
+serves:"Serves 3",
+desc:"Boneless Fillet Fish"
+},
+
+{
+id:"S3",
+name:"Indian Mackerel (Bangda)",
+cat:"sea",
+imgs:[
+"https://images.unsplash.com/photo-1544025162-d76694265947?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
+"https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600"
+],
+price:350, oldPrice:420,
+weight:"500 g",
+pieces:"6-10 Pieces",
+serves:"Serves 3",
+desc:"Oily & Healthy Fish"
+}
+
+];
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const slidingName = document.getElementById('slidingName');
+    const placeholderWrap = document.getElementById('placeholderWrap');
+
+    const names = ["Rohu", "Prawns", "Pomfret", "Catla"];
+    let nameIdx = 0;
+    setInterval(() => {
+        if(searchInput.value === "") {
+            nameIdx = (nameIdx + 1) % names.length;
+            slidingName.innerText = names[nameIdx];
+        }
+    }, 4000);
+
+    function togglePlaceholder() {
+        const val = searchInput.value;
+        placeholderWrap.style.display = val === "" ? "flex" : "none";
+        clearSearch.style.display = val === "" ? "none" : "flex";
+    }
+
+    function clearInput() {
+        searchInput.value = "";
+        togglePlaceholder();
+        showBlankState();
+        searchInput.focus();
+    }
+
+    function handleInput(e) {
+        const val = e.target.value.trim();
+        if (e.key === "Enter") { executeSearch(val); return; }
+        if (val.length === 0) { showBlankState(); } 
+        else { showSuggestions(val); }
+    }
+
+    function showBlankState() {
+        document.getElementById('blank-state').classList.remove('hidden');
+        document.getElementById('suggestion-box').classList.add('hidden');
+        document.getElementById('results-list').classList.add('hidden');
+        document.getElementById('results-header').classList.add('hidden');
+        
+        // Hide spell correction when showing blank state
+        const spellCorrection = document.getElementById('spell-correction');
+        if (spellCorrection) spellCorrection.classList.add('hidden');
+
+        loadHistory();
+    }
+
+    // Calculates how many letters are different between two words
+    function getEditDistance(a, b) {
+        if(a.length === 0) return b.length;
+        if(b.length === 0) return a.length;
+        var matrix = [];
+        for(var i = 0; i <= b.length; i++){ matrix[i] = [i]; }
+        for(var j = 0; j <= a.length; j++){ matrix[0][j] = j; }
+        for(var i = 1; i <= b.length; i++){
+            for(var j = 1; j <= a.length; j++){
+                if(b.charAt(i-1) == a.charAt(j-1)){
+                    matrix[i][j] = matrix[i-1][j-1];
+                } else {
+                    matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, Math.min(matrix[i][j-1] + 1, matrix[i-1][j] + 1));
+                }
+            }
+        }
+        return matrix[b.length][a.length];
+    }
+
+    // New matching function that handles both exact matches and typos
+    function findMatches(query) {
+        const q = query.toLowerCase().trim();
+        return fishData.filter(f => {
+            const name = f.name.toLowerCase();
+            const desc = f.desc.toLowerCase();
+            
+            // 1. Check for exact match first
+            if (name.includes(q) || desc.includes(q)) return true;
+
+            // 2. Check for typos (Fuzzy matching)
+            const words = name.split(/[\s()]+/); // Split fish name into separate words
+            for (let word of words) {
+                if (word.length > 2) { // Only check words longer than 2 letters
+                    const distance = getEditDistance(q, word);
+                    // Allow 2 typos for short words, 3 typos for longer words
+                    const maxTypos = word.length <= 5 ? 2 : 3; 
+                    if (distance <= maxTypos) return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    function showSuggestions(query) {
+        document.getElementById('results-list').classList.add('hidden');
+        document.getElementById('results-header').classList.add('hidden');
+        document.getElementById('blank-state').classList.add('hidden');
+        const box = document.getElementById('suggestion-box');
+        box.classList.remove('hidden');
+        
+        // Hide spell correction when just showing suggestions
+        const spellCorrection = document.getElementById('spell-correction');
+        if (spellCorrection) spellCorrection.classList.add('hidden');
+        
+        // USE THE NEW TYPO-TOLERANT MATCHER
+        const filtered = findMatches(query);
+        
+        box.innerHTML = filtered.length > 0 ? filtered.map(f => `
+            <div onclick="fillSearch('${f.name}')" class="p-5 border-b border-slate-50 flex items-center gap-4 text-slate-800 font-medium active:bg-slate-50">
+                <i class="fas fa-search text-slate-300"></i> ${f.name}
+            </div>`).join('') : `<div class="p-10 text-center text-slate-400">No matches found. Try checking your spelling!</div>`;
+    }
+
+    let cart = JSON.parse(localStorage.getItem('gr_fishes_cart')) || [];
+
+    // FIXED: Professional logic with explicit class resets to prevent color glitch
+    function updateItemQty(id, delta) {
+        const input = document.getElementById(`qty-${id}`);
+        const btn = document.getElementById(`btn-${id}`);
+        let currentVal = parseInt(input.value);
+        let newVal = currentVal + delta;
+
+        const inCart = cart.some(c => c.id === id);
+
+        if (inCart) {
+            if (newVal >= 0) {
+                input.value = newVal;
+                if (delta < 0) {
+                    btn.innerText = "REMOVE";
+                    btn.className = "add-btn-small btn-remove";
+                } else {
+                    btn.innerText = "ADD +";
+                    btn.className = "add-btn-small";
+                }
+            }
+        } else {
+            if (newVal >= 1) {
+                input.value = newVal;
+            }
+        }
+    }
+
+    function addWithFeedback(id) {
+        const input = document.getElementById(`qty-${id}`);
+        const btn = document.getElementById(`btn-${id}`);
+        const fish = fishData.find(f => f.id === id);
+        const qty = parseInt(input.value);
+        const existingIndex = cart.findIndex(c => c.id === id);
+
+        if (btn.innerText === "REMOVE") {
+            if (qty === 0) {
+                if (existingIndex > -1) cart.splice(existingIndex, 1);
+                input.value = 1; 
+            } else {
+                if (existingIndex > -1) cart[existingIndex].qty = qty;
+            }
+            btn.innerText = "REMOVED √";
+            btn.className = "add-btn-small added-success"; // Green success
+            setTimeout(() => {
+                btn.innerText = "ADD +";
+                btn.className = "add-btn-small"; // Strictly back to default Red
+            }, 1000);
+        } else {
+            if (existingIndex > -1) cart[existingIndex].qty = qty; 
+            else cart.push({ ...fish, qty: qty });
+
+            btn.innerText = "ADDED √";
+            btn.className = "add-btn-small added-success";
+            setTimeout(() => {
+                btn.innerText = "ADD +";
+                btn.className = "add-btn-small";
+            }, 1000);
+        }
+
+        saveAndRefresh();
+    }
+
+    function saveAndRefresh() {
+        localStorage.setItem('gr_fishes_cart', JSON.stringify(cart));
+        updateFloatingCart();
+    }
+
+    function updateFloatingCart() {
+        const popup = document.getElementById('floating-cart');
+        if (cart.length === 0) { popup.style.display = 'none'; return; }
+
+        popup.style.display = 'flex';
+        let totalItems = 0; let totalPrice = 0; let totalSavings = 0;
+
+        cart.forEach(item => {
+            totalItems += item.qty;
+            totalPrice += (item.price * item.qty);
+            let original = item.oldPrice || Math.round(item.price * 1.15);
+            totalSavings += (original - item.price) * item.qty;
+        });
+
+        document.getElementById('popup-item-count').innerText = totalItems;
+        document.getElementById('popup-total-price').innerText = `₹${totalPrice}`;
+        document.getElementById('total-saved-popup').innerText = `₹${totalSavings}`;
+    }
+
+    function executeSearch(query) {
+        if (!query) return;
+        saveHistory(query);
+        searchInput.blur();
+        searchInput.value = query;
+        togglePlaceholder();
+        const content = document.getElementById('search-content');
+        content.classList.add('refresh-active');
+        
+        setTimeout(() => {
+            document.getElementById('suggestion-box').classList.add('hidden');
+            document.getElementById('blank-state').classList.add('hidden');
+            const list = document.getElementById('results-list');
+            const header = document.getElementById('results-header');
+            const spellCorrection = document.getElementById('spell-correction'); // Target the new div
+            
+            list.classList.remove('hidden');
+            header.classList.remove('hidden');
+            
+            // USE THE NEW TYPO-TOLERANT MATCHER
+            const matches = findMatches(query);
+            
+            document.getElementById('live-counter').innerText = `${matches.length} ITEMS FOUND`;
+            
+            if(matches.length > 0) {
+                // Check if the customer typed the spelling exactly right
+                const isExactMatch = matches.some(m => 
+                    m.name.toLowerCase().includes(query.toLowerCase()) || 
+                    m.desc.toLowerCase().includes(query.toLowerCase())
+                );
+
+                // If it's NOT an exact match (meaning it was a wrong spelling)
+                if (!isExactMatch) {
+                    spellCorrection.classList.remove('hidden');
+                    // Show the "Showing results for..." Google style text
+                    spellCorrection.innerHTML = `
+                        <p class="mb-1">Showing results for <span class="font-bold text-[#800000] cursor-pointer hover:underline" onclick="fillSearch('${matches[0].name.split(' ')[0]}')">${matches[0].name}</span></p>
+                        <p class="text-[3vw] text-slate-400">Search instead for <span class="italic font-medium">${query}</span></p>
+                    `;
+                } else {
+                    // Spelling was perfectly correct, hide the message
+                    spellCorrection.classList.add('hidden');
+                }
+
+                list.innerHTML = matches.map(f => `
+                    <div class="result-card">
+                        <div class="result-info">
+                            <h4>${f.name}</h4>
+                            <p class="text-[2.8vw] text-slate-400 mt-1 uppercase font-bold">${f.desc}</p>
+                            <div class="specs-text mt-2">
+                                <span>${f.weight}</span> | <span>${f.pieces}</span> | <span class="text-[#800000]">${f.serves}</span>
+                            </div>
+                            <div class="flex items-center gap-2 mt-3">
+                                <span style="font-family:'Montserrat'; font-size:5vw; font-weight:700;">₹${f.price}</span>
+                                <span class="text-slate-400 line-through text-[3vw] font-bold">₹${f.oldPrice}</span>
+                            </div>
+                        </div>
+                        <div class="result-img-container">
+                            <img src="${f.imgs[0]}" class="result-img shadow-md">
+                            <div class="qty-box">
+                                <div class="qty-btn" onclick="updateItemQty('${f.id}', -1)">-</div>
+                                <input type="text" id="qty-${f.id}" value="1" readonly class="qty-input">
+                                <div class="qty-btn" onclick="updateItemQty('${f.id}', 1)">+</div>
+                            </div>
+                            <button id="btn-${f.id}" onclick="addWithFeedback('${f.id}')" class="add-btn-small active:scale-95 transition-all">ADD +</button>
+                        </div>
+                    </div>`).join('');
+            } else {
+                // Completely unrecognized word
+                spellCorrection.classList.add('hidden');
+                list.innerHTML = `<div class="text-center py-24 font-black text-slate-300 uppercase tracking-widest">No Items Found</div>`;
+            }
+            content.classList.remove('refresh-active');
+        }, 400);
+    }
+
+    function fillSearch(val) {
+        searchInput.value = val;
+        togglePlaceholder();
+        executeSearch(val);
+    }
+
+    function saveHistory(q) {
+        let history = JSON.parse(localStorage.getItem('search_history') || '[]');
+        if(!history.includes(q)) {
+            history.unshift(q);
+            if(history.length > 8) history.pop();
+            localStorage.setItem('search_history', JSON.stringify(history));
+        }
+    }
+
+    function deleteHistoryItem(item, event) {
+        event.stopPropagation();
+        let history = JSON.parse(localStorage.getItem('search_history') || '[]');
+        history = history.filter(h => h !== item);
+        localStorage.setItem('search_history', JSON.stringify(history));
+        loadHistory();
+    }
+
+    function clearAllHistory() {
+        localStorage.removeItem('search_history');
+        loadHistory();
+    }
+
+    function loadHistory() {
+        let history = JSON.parse(localStorage.getItem('search_history') || '[]');
+        const container = document.getElementById('search-history');
+        const section = document.getElementById('history-section');
+        const trendingList = document.getElementById('trending-list');
+
+        if(history.length > 0) {
+            section.classList.remove('hidden');
+            container.innerHTML = history.map(h => `
+                <div class="history-pill" onclick="fillSearch('${h}')">
+                    <i class="fas fa-history text-slate-900"></i>
+                    <span>${h}</span>
+                    <div class="remove-btn" onclick="deleteHistoryItem('${h}', event)">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>`).join('');
+        } else { section.classList.add('hidden'); }
+
+        const globalTrending = ["Rohu", "Prawns", "Catla", "Pomfret"];
+        trendingList.innerHTML = globalTrending.map(name => `
+            <div onclick="fillSearch('${name}')" class="pill-dark active:bg-slate-900 active:text-white transition-all">
+                <i class="fas fa-arrow-trend-up"></i> ${name}
+            </div>`).join('');
+    }
+
+    loadHistory();
+    updateFloatingCart();
+    </script>
+</body>
+</html>

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    <title>GR Fishes - Your Selection</title>  
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Lato:wght@400&display=swap" rel="stylesheet">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">  
+    <script src="https://cdn.tailwindcss.com"></script>  
+
+    <style>  
+        /* ADDED: Global Smartphone Adjustment Properties */  
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: hidden; }  
+        body { overflow-x: hidden; width: 100vw; }  
+        i.fas, i.far { flex-shrink: 0; }  
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-text-size-adjust: 100%; }  
+        body { font-family: 'Lato', sans-serif; background-color: #f8fafc; }  
+          
+        .no-scrollbar::-webkit-scrollbar { display: none; }  
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }  
+
+        /* Original Home Styles for Cart and Checkout */  
+        .bengali-tholi { width: 110px; height: 135px; background: #FFD700; position: relative; border-radius: 8px 8px 35px 35px; border: 4px solid #d11243; overflow: hidden; box-shadow: 8px 8px 0px rgba(0,0,0,0.05); }  
+        .tholi-stripes { width: 100%; height: 100%; background: repeating-linear-gradient(90deg, transparent, transparent 15px, #FF4500 15px, #FF4500 25px, transparent 25px, transparent 40px, #228B22 40px, #228B22 50px); opacity: 0.7; }  
+        .tholi-handle { width: 60px; height: 45px; border: 6px solid #800000; border-bottom: none; border-radius: 40px 40px 0 0; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); }  
+        @keyframes tholiFloat { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-15px) rotate(2deg); } 100% { transform: translateY(0px) rotate(0deg); } }  
+        .tholi-container { animation: tholiFloat 3s ease-in-out infinite; margin-bottom: 35px; }  
+          
+        .pay-option { border: 2px solid #e2e8f0; transition: all 0.2s ease; }  
+        .pay-option.active { border-color: #800000; background-color: #8000000a; }  
+        .pay-option.active i, .pay-option.active span { color: #800000; }  
+
+        #checkout-page {  
+            position: fixed; inset: 0; background-color: #f8fafc; z-index: 4000;  
+            transform: translateY(100%); transition: transform 0.4s ease-out;  
+            overflow-y: auto; display: none;  
+        }  
+
+        .refresh-active { opacity: 0 !important; transform: scale(0.95) translateY(10px) !important; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important; }  
+    </style>
+</head>  
+<body class="no-scrollbar">  
+
+<div class="bg-[#800000] text-white p-5 flex items-center gap-4 sticky top-0 z-10">  
+    <button onclick="window.location.href='./index.html'" class="text-xl active:scale-90 transition-all"><i class="fas fa-arrow-left"></i></button>  
+    <h2 class="text-xl font-bold font-['Montserrat'] uppercase tracking-tight">Your Selection</h2>  
+</div>  
+
+<div id="selection-view" class="pb-32">  
+    <div id="cart-items-list" class="p-4 space-y-4"></div>  
+
+    <div id="empty-cart-msg" class="flex flex-col items-center justify-center pt-24 px-6 text-center hidden">  
+        <div class="tholi-container">  
+            <div class="relative">  
+                <div class="tholi-handle"></div>  
+                <div class="bengali-tholi"><div class="tholi-stripes"></div><i class="fas fa-fish absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/40 text-4xl"></i></div>  
+            </div>  
+        </div>  
+        <h3 class="text-2xl font-black text-slate-800 leading-tight">Hey, your tholi is Empty!</h3>  
+        <p class="text-slate-500 mt-2 font-medium">Add some fresh fish to get started.</p>  
+        <button onclick="window.location.href='./index.html'" class="mt-8 bg-[#d11243] text-white px-10 py-3 rounded-xl font-bold shadow-lg active:scale-95 transition-all">SHOP NOW</button>  
+    </div>  
+
+    <div id="cart-footer" class="fixed bottom-0 left-0 w-full bg-white border-t p-5 hidden">  
+        <div class="flex justify-between items-center mb-4">  
+            <span class="text-slate-500 font-bold text-sm uppercase">Total Bill:</span>  
+            <span id="cart-total-price" class="text-2xl font-black text-slate-900">₹0</span>  
+        </div>  
+        <button id="checkout-btn" class="w-full bg-[#800000] text-white font-black py-4 rounded-2xl shadow-lg active:scale-95 transition-all">
+            PROCEED TO CHECKOUT
+        </button>  
+    </div>  
+</div>  
+
+<div id="checkout-page" class="no-scrollbar">  
+    <div class="bg-white p-5 flex items-center gap-4 sticky top-0 z-10 border-b">  
+        <button onclick="toggleCheckout(false)" class="text-xl active:scale-90 transition-all"><i class="fas fa-chevron-down text-[#800000]"></i></button>  
+        <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Checkout</h2>  
+    </div>  
+
+    <div class="p-4 space-y-4 pb-10">  
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 relative">  
+            <h3 class="font-black text-slate-800 text-lg mb-4">Delivery Details</h3>  
+
+            <div id="address-display-card" class="hidden bg-[#f8fafc] p-4 rounded-xl border-2 border-[#800000]/10 relative transition-all">
+                <button onclick="toggleAddressEdit(true)" class="absolute top-4 right-4 text-[#800000] text-xs font-black uppercase tracking-wider flex items-center gap-1 active:scale-95 transition-transform">
+                    <i class="fas fa-pen"></i> Edit
+                </button>
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-[#800000] text-white flex items-center justify-center text-xs"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <p id="display-name-phone" class="font-black text-slate-800 text-sm leading-none"></p>
+                    </div>
+                </div>
+                <p id="display-full-address" class="text-xs text-slate-500 font-bold leading-relaxed ml-10"></p>
+            </div>
+
+            <div id="address-edit-form" class="space-y-4">  
+                <div>  
+                    <input type="text" id="cust-name" onblur="validateField(this)" oninput="validateCheckout()" placeholder="Full Name*" class="w-full border border-slate-200 rounded-lg p-4 text-sm focus:outline-none transition-all">  
+                    <p class="text-red-500 text-[10px] font-bold mt-1 hidden" id="err-cust-name">This field is mandatory</p>  
+                </div>  
+                <div>  
+                    <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden transition-all" id="phone-container">  
+                        <span class="px-4 text-slate-400 font-bold border-r bg-slate-50">+91</span>  
+                        <input type="tel" id="cust-phone" maxlength="10" onblur="validateField(this)" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10); validateCheckout()" placeholder="Phone Number*" class="w-full p-4 text-sm focus:outline-none">  
+                    </div>  
+                    <p class="text-red-500 text-[10px] font-bold mt-1 hidden" id="err-cust-phone">Enter a valid 10-digit number</p>  
+                </div>  
+                <div>  
+                    <input type="number" id="cust-pincode" onblur="validateField(this)" oninput="if(value.length>6)value=value.slice(0,6); validateCheckout()" placeholder="Pin Code*" class="w-full border border-slate-200 rounded-lg p-4 text-sm focus:outline-none transition-all">  
+                    <p class="text-red-500 text-[10px] font-bold mt-1 hidden" id="err-cust-pincode">This field is mandatory</p>  
+                </div>  
+                <div class="space-y-1">  
+                    <input type="text" id="cust-house" onblur="validateField(this)" oninput="validateCheckout()" placeholder="House Number/Tower/Block*" class="w-full border border-slate-200 rounded-lg p-4 text-sm focus:outline-none transition-all">  
+                    <p class="text-amber-600 text-[10px] font-bold">*House Number will allow a doorstep delivery</p>  
+                    <p class="text-red-500 text-[10px] font-bold hidden" id="err-cust-house">This field is mandatory</p>  
+                </div>  
+                <div class="space-y-1">  
+                    <input type="text" id="cust-address" onblur="validateField(this)" oninput="validateCheckout()" placeholder="Address (locality, building, street)*" class="w-full border border-slate-200 rounded-lg p-4 text-sm focus:outline-none transition-all">  
+                    <p class="text-amber-600 text-[10px] font-bold">*Please update society/apartment details</p>  
+                    <p class="text-red-500 text-[10px] font-bold hidden" id="err-cust-address">This field is mandatory</p>  
+                </div>  
+                <div>  
+                    <input type="text" id="cust-locality" onblur="validateField(this)" oninput="validateCheckout()" placeholder="Locality / Town*" class="w-full border border-slate-200 rounded-lg p-4 text-sm focus:outline-none transition-all">  
+                    <p class="text-red-500 text-[10px] font-bold mt-1 hidden" id="err-cust-locality">This field is mandatory</p>  
+                </div>  
+                <div class="grid grid-cols-2 gap-3">  
+                    <div>  
+                        <input type="text" id="cust-city" onblur="validateField(this)" oninput="validateCheckout()" placeholder="City / District*" class="w-full border border-slate-200 rounded-lg p-4 text-sm focus:outline-none transition-all">  
+                        <p class="text-red-500 text-[10px] font-bold mt-1 hidden" id="err-cust-city">Mandatory</p>  
+                    </div>  
+                    <div>  
+                        <input type="text" id="cust-state" onblur="validateField(this)" oninput="validateCheckout()" placeholder="State*" class="w-full border border-slate-200 rounded-lg p-4 text-sm focus:outline-none transition-all">  
+                        <p class="text-red-500 text-[10px] font-bold mt-1 hidden" id="err-cust-state">Mandatory</p>  
+                    </div>  
+                </div>  
+                <button id="btn-save-address" onclick="saveAddressToProfile()" class="w-full bg-slate-800 text-white font-bold text-xs uppercase tracking-widest py-3 rounded-lg mt-2 active:scale-95 transition-transform hidden">Save & Use This Address</button>
+            </div>  
+        </div>  
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">  
+            <h3 class="font-black text-slate-800 uppercase text-xs tracking-widest mb-4">Payment Method</h3>  
+            <div class="grid grid-cols-2 gap-3">  
+                <div id="pay-cod" onclick="setPayment('cod')" class="pay-option active flex flex-col items-center justify-center p-4 rounded-2xl cursor-pointer">  
+                    <i class="fas fa-truck text-xl mb-1"></i>  
+                    <span class="text-[10px] font-black uppercase">COD</span>  
+                </div>  
+                <div id="pay-online" onclick="setPayment('online')" class="pay-option flex flex-col items-center justify-center p-4 rounded-2xl cursor-pointer opacity-50">  
+                    <i class="fas fa-mobile-alt text-xl mb-1"></i>  
+                    <span class="text-[10px] font-black uppercase">Online</span>  
+                </div>  
+            </div>  
+        </div>  
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-2">  
+            <h3 class="font-black text-slate-800 uppercase text-xs tracking-widest mb-4">Detailed Bill Receipt</h3>  
+            <div id="receipt-items-list" class="space-y-3 mb-4"></div>  
+            <div class="h-[1px] border-t border-dashed border-slate-300 my-4"></div>  
+            <div class="space-y-3 text-sm">  
+                <div class="flex justify-between text-slate-500 font-medium"><span>Items Total (Original)</span><span id="bill-subtotal" class="line-through">₹0</span></div>  
+                <div class="flex justify-between text-emerald-600 font-bold"><span>Total Savings</span><span id="bill-discount">- ₹0</span></div>  
+                <div class="flex justify-between text-slate-500 font-medium"><span>Delivery Fee</span><span class="text-emerald-600 font-bold uppercase text-[10px]">FREE</span></div>  
+                <div class="h-[2px] border-t border-slate-900 my-2"></div>  
+                <div class="flex justify-between text-xl font-black text-slate-900"><span>Amount to Pay</span><span id="bill-total">₹0</span></div>  
+            </div>  
+        </div>  
+
+        <div class="bg-white border-t p-4 mt-2 flex items-center justify-between shadow-sm rounded-2xl">  
+            <div class="flex flex-col">  
+                <span id="footer-final-price" class="text-xl font-black text-slate-900 leading-none">₹0</span>  
+                <span class="text-[9px] font-bold text-[#800000] uppercase mt-1">Taxes Included</span>  
+            </div>  
+            <button id="btn-place-order" disabled onclick="placeOrder()" class="bg-slate-300 text-white px-8 py-3 rounded-xl font-black transition-all uppercase text-sm whitespace-nowrap cursor-not-allowed">  
+                PLACE ORDER  
+            </button>  
+        </div>  
+    </div>  
+</div>  
+
+<div id="order-success" class="fixed inset-0 bg-white z-[5000] flex flex-col items-center justify-center p-8 text-center transform scale-110 opacity-0 pointer-events-none transition-all duration-500">  
+    <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mb-6 text-emerald-600 text-5xl border-4 border-white shadow-xl animate-bounce">  
+        <i class="fas fa-check"></i>  
+    </div>  
+    <h2 class="text-3xl font-black text-slate-800 mb-2 font-['Montserrat']">Order Confirmed!</h2>  
+    <p class="text-slate-500 text-lg mb-8">Thank you, <span id="success-name" class="text-[#800000] font-black">Customer</span>! Your fresh fish will reach you in time.</p>  
+    <button onclick="closeOrderSuccess()" class="bg-[#800000] text-white px-12 py-4 rounded-2xl font-black shadow-xl active:scale-90 transition-all uppercase tracking-widest text-sm">Back to Orders</button>  
+</div>  
+
+<script>  
+    const fishData = [
+
+/* ================= PRAWNS & CRABS ================= */
+{
+id:"P1",
+name:"Freshwater Prawns (Medium)",
+cat:"crabs",
+imgs:[
+"https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=600",
+"https://images.unsplash.com/photo-1625944525903-b1dcb0c2c0df?w=600",
+"https://images.unsplash.com/photo-1604908176997-4318e3d7d8d8?w=600"
+],
+price:425, oldPrice:479,
+weight:"250 g", pieces:"20-30 Pieces",
+serves:"Serves 2-3",
+desc:"Eral/Etti/Chemmeen"
+},
+
+{
+id:"P2",
+name:"Tiger Prawns (Large)",
+cat:"crabs",
+imgs:[
+"https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600",
+"https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600",
+"https://images.unsplash.com/photo-1625938145744-e380c2d3f7c4?w=600"
+],
+price:899, oldPrice:1050,
+weight:"500 g", pieces:"6-10 Pieces",
+serves:"Serves 3-4",
+desc:"Premium Jumbo Prawns"
+},
+
+{
+id:"P3",
+name:"Mud Crab (Kankra)",
+cat:"crabs",
+imgs:[
+"https://images.unsplash.com/photo-1617196038435-0c0b8c2d4c77?w=600",
+"https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600",
+"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600"
+],
+price:780, oldPrice:900,
+weight:"500 g",
+pieces:"2-3 Pieces",
+serves:"Serves 2-3",
+desc:"Fresh Live Crab"
+},
+
+/* ================= FRESH WATER ================= */
+{
+id:"F1",
+name:"Padma Rohu (রহू)",
+cat:"fresh",
+imgs:[
+"https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=600",
+"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600"
+],
+price:550, oldPrice:620,
+weight:"500 g",
+pieces:"8-10 Pieces",
+serves:"Serves 3-4",
+desc:"Premium River Fish"
+},
+
+{
+id:"F2",
+name:"River Catla (কটলা)",
+cat:"fresh",
+imgs:[
+"https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
+"https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600"
+],
+price:600, oldPrice:680,
+weight:"500 g",
+pieces:"6-8 Pieces",
+serves:"Serves 3",
+desc:"River Caught Catla"
+},
+
+{
+id:"F3",
+name:"Hilsa (ইলিশ)",
+cat:"fresh",
+imgs:[
+"https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600",
+"https://images.unsplash.com/photo-1611175694980-5c3d1d9c7a2f?w=600",
+"https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600"
+],
+price:1200, oldPrice:1400,
+weight:"500 g",
+pieces:"4-6 Pieces",
+serves:"Serves 3",
+desc:"King of Fish (Premium Hilsa)"
+},
+
+{
+id:"F4",
+name:"Tilapia (তেলাপিয়া)",
+cat:"fresh",
+imgs:[
+"https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
+"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600"
+],
+price:280, oldPrice:320,
+weight:"500 g",
+pieces:"6-8 Pieces",
+serves:"Serves 2-3",
+desc:"Budget Fresh Fish"
+},
+
+/* ================= SEA FISH ================= */
+{
+id:"S1",
+name:"White Pomfret",
+cat:"sea",
+imgs:[
+"https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600",
+"https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600",
+"https://images.unsplash.com/photo-1565680018434-b513d1d44c70?w=600"
+],
+price:950, oldPrice:1100,
+weight:"500 g",
+pieces:"2-4 Pieces",
+serves:"Serves 2",
+desc:"Premium Sea Delicacy"
+},
+
+{
+id:"S2",
+name:"Bhetki (Sea Bass)",
+cat:"sea",
+imgs:[
+"https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
+"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600"
+],
+price:720, oldPrice:820,
+weight:"500 g",
+pieces:"4-6 Pieces",
+serves:"Serves 3",
+desc:"Boneless Fillet Fish"
+},
+
+{
+id:"S3",
+name:"Indian Mackerel (Bangda)",
+cat:"sea",
+imgs:[
+"https://images.unsplash.com/photo-1544025162-d76694265947?w=600",
+"https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
+"https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600"
+],
+price:350, oldPrice:420,
+weight:"500 g",
+pieces:"6-10 Pieces",
+serves:"Serves 3",
+desc:"Oily & Healthy Fish"
+}
+
+];
+    // ===== LOGIN SYSTEM =====
+    function getUsers(){
+        return JSON.parse(localStorage.getItem('gr_users')) || [];
+    }
+
+    function getCurrentUser(){
+        return getUsers().find(u => u.isLoggedIn);
+    }
+    
+    let cart = JSON.parse(localStorage.getItem('gr_fishes_cart')) || [];  
+    let selectedPayment = 'cod';  
+
+    window.onpopstate = function() {  
+        const ch = document.getElementById('checkout-page');  
+        if (ch.style.display === 'block') {  
+            toggleCheckout(false);  
+        } else {  
+            window.location.href = './index.html';  
+        }  
+    };  
+    history.pushState(null, null, location.href);  
+
+    function renderCartItems() {  
+        const list = document.getElementById('cart-items-list'), footer = document.getElementById('cart-footer'), emptyMsg = document.getElementById('empty-cart-msg'), totalDisplay = document.getElementById('cart-total-price');  
+        if (cart.length === 0) { list.innerHTML = ""; footer.classList.add('hidden'); emptyMsg.classList.remove('hidden'); return; }  
+        emptyMsg.classList.add('hidden'); footer.classList.remove('hidden');  
+        let total = 0;  
+        list.innerHTML = cart.map(item => {  
+            const fish = fishData.find(f => f.id === item.id);  
+            const itemTotal = fish.price * item.qty; total += itemTotal;  
+            return `<div class="flex items-center gap-4 bg-white p-3 rounded-2xl border"><img src="${fish.imgs ? fish.imgs[0] : fish.img}" 
+     onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600'"
+     class="w-20 h-20 object-cover rounded-xl shadow-sm"><div class="flex-grow"><h4 class="font-bold text-slate-800">${fish.name}</h4><p class="text-xs text-slate-400 font-bold uppercase">${fish.weight}</p><p class="font-black text-[#800000] mt-1">₹${itemTotal}</p></div><div class="flex items-center bg-white rounded-lg border p-1 gap-3"><button onclick="changeQty('${item.id}', -1)" class="w-6 h-6 font-bold text-[#800000]">-</button><span class="font-black text-sm">${item.qty}</span><button onclick="changeQty('${item.id}', 1)" class="w-6 h-6 font-bold text-[#800000]">+</button></div></div>`;}).join('');  
+        totalDisplay.innerText = `₹${total}`;  
+        if(document.getElementById('checkout-page').style.display === 'block') updateReceipt();  
+    }  
+
+    function changeQty(id, delta) {  
+        const item = cart.find(c => c.id === id);  
+        if (item) {   
+            item.qty += delta;   
+            if (item.qty <= 0) cart = cart.filter(c => c.id !== id);   
+            localStorage.setItem('gr_fishes_cart', JSON.stringify(cart));  
+            renderCartItems();   
+        }  
+    }  
+
+    function updateReceipt() {  
+        const receiptList = document.getElementById('receipt-items-list');  
+        let totalOriginal = 0, totalDiscount = 0, totalFinal = 0;  
+        receiptList.innerHTML = cart.map(item => {  
+            const fish = fishData.find(f => f.id === item.id);  
+            let originalPrice = fish.oldPrice || Math.round(fish.price * 1.15);  
+            let lineOriginal = originalPrice * item.qty, lineFinal = fish.price * item.qty, lineDiscount = lineOriginal - lineFinal;  
+            totalOriginal += lineOriginal; totalDiscount += lineDiscount; totalFinal += lineFinal;  
+            return `<div class="flex justify-between items-start text-xs border-b border-slate-50 pb-2"><div class="flex flex-col"><span class="font-bold text-slate-800">${fish.name} x ${item.qty}</span><span class="text-[10px] text-slate-400">Original: ₹${originalPrice}</span></div><div class="text-right"><div class="text-slate-400 line-through">₹${lineOriginal}</div><div class="font-black text-slate-900">₹${lineFinal}</div></div></div>`;  
+        }).join('');  
+        document.getElementById('bill-subtotal').innerText = `₹${totalOriginal}`;  
+        document.getElementById('bill-discount').innerText = `- ₹${totalDiscount}`;  
+        document.getElementById('bill-total').innerText = `₹${totalFinal}`;  
+        document.getElementById('footer-final-price').innerText = `₹${totalFinal}`;  
+    }  
+
+    function toggleCheckout(show) {  
+        const checkoutPage = document.getElementById('checkout-page');  
+        if (show) {  
+            updateReceipt();  
+            checkoutPage.style.display = 'block';
+            autofillUserDetails();  
+            setTimeout(() => { checkoutPage.style.transform = 'translateY(0)'; }, 10);  
+        } else {   
+            checkoutPage.style.transform = 'translateY(100%)';  
+            setTimeout(() => { checkoutPage.style.display = 'none'; }, 400);  
+        }  
+    }  
+
+    function setPayment(method) {  
+        selectedPayment = method;  
+        const cod = document.getElementById('pay-cod'), online = document.getElementById('pay-online');  
+        if(method === 'cod') { cod.classList.add('active'); cod.classList.remove('opacity-50'); online.classList.remove('active'); online.classList.add('opacity-50'); }  
+        else { online.classList.add('active'); online.classList.remove('opacity-50'); cod.classList.remove('active'); cod.classList.add('opacity-50'); }  
+    }  
+
+    function validateField(el) {  
+        const errorMsg = document.getElementById('err-' + el.id);  
+        const container = el.id === 'cust-phone' ? document.getElementById('phone-container') : el;  
+        let isInvalid = !el.value.trim();  
+        if (el.id === 'cust-phone' && el.value.length !== 10) isInvalid = true;  
+        if (isInvalid) {  
+            container.style.borderColor = '#ef4444';  
+            if (errorMsg) errorMsg.classList.remove('hidden');  
+        } else {  
+            container.style.borderColor = '#22c55e';  
+            if (errorMsg) errorMsg.classList.add('hidden');  
+        }  
+    }  
+
+    function validateCheckout() {  
+        const fields = ['cust-name', 'cust-phone', 'cust-pincode', 'cust-house', 'cust-address', 'cust-locality', 'cust-city', 'cust-state'];  
+        let allFilled = true;  
+        fields.forEach(id => {  
+            const input = document.getElementById(id);  
+            if (!input.value.trim()) allFilled = false;  
+            const container = id === 'cust-phone' ? document.getElementById('phone-container') : input;  
+            if (input.value.trim() && (id !== 'cust-phone' || input.value.length === 10)) {  
+                container.style.borderColor = '#22c55e';  
+                const err = document.getElementById('err-' + id);  
+                if (err) err.classList.add('hidden');  
+            }  
+        });  
+        const phone = document.getElementById('cust-phone').value.trim();  
+        const btn = document.getElementById('btn-place-order');  
+        if (allFilled && phone.length === 10) {  
+            btn.disabled = false;  
+            btn.classList.remove('bg-slate-300', 'cursor-not-allowed');  
+            btn.classList.add('bg-[#800000]', 'shadow-lg');  
+        } else {  
+            btn.disabled = true;  
+            btn.classList.add('bg-slate-300', 'cursor-not-allowed');  
+            btn.classList.remove('bg-[#800000]', 'shadow-lg');  
+        }  
+    }  
+
+    function placeOrder() {
+        const user = getCurrentUser();
+        if(!user){
+            alert("Please login first");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const cartItems = cart.map(item => {
+            const fish = fishData.find(f => f.id === item.id);
+            return { ...fish, qty: item.qty };
+        });
+
+        let existingOrders = JSON.parse(localStorage.getItem('gr_orders')) || [];
+
+        const newOrder = {
+            userPhone: user.phone,   
+            id: "ORD-" + Math.floor(Math.random() * 9000 + 1000),
+            name: cartItems[0].name + (cartItems.length > 1 ? ` +${cartItems.length - 1} more` : ""),
+            img: cartItems[0].img,
+            qty: cartItems.reduce((acc, curr) => acc + curr.qty, 0),
+            price: document.getElementById('bill-total').innerText.replace('₹', ''),
+            status: "Order Placed",
+            timestamp: Date.now()
+        };
+
+        existingOrders.unshift(newOrder);
+        localStorage.setItem('gr_orders', JSON.stringify(existingOrders));
+
+        const name = document.getElementById('cust-name').value;
+        document.getElementById('success-name').innerText = name || "Customer";
+
+        const successPage = document.getElementById('order-success');
+        successPage.style.opacity = '1';
+        successPage.style.scale = '1';
+        successPage.style.pointerEvents = 'all';
+    }  
+
+    function closeOrderSuccess() {  
+        localStorage.removeItem('gr_fishes_cart');  
+        window.location.href = "./orders.html";  
+    }  
+
+    renderCartItems();
+    updateCheckoutButton();
+
+    // MODIFIED: Autofill Logic & Helper Functions
+    let isEditingAddress = false;
+
+    function autofillUserDetails() {
+        const user = getCurrentUser();
+        if (!user) return;
+
+        document.getElementById('cust-name').value = user.fullName || "";
+        document.getElementById('cust-phone').value = user.phone || "";
+
+        const addr = user.address || {};
+        document.getElementById('cust-house').value = addr.house || "";
+        document.getElementById('cust-address').value = addr.street || "";
+        document.getElementById('cust-locality').value = addr.locality || "";
+        document.getElementById('cust-city').value = addr.city || "";
+        document.getElementById('cust-state').value = addr.state || "";
+        document.getElementById('cust-pincode').value = addr.pincode || "";
+
+        if (addr.house && addr.street && addr.city && addr.pincode && user.fullName) {
+            updateAddressDisplayCard(user);
+            toggleAddressEdit(false);
+        } else {
+            toggleAddressEdit(true);
+        }
+        
+        validateCheckout();
+    }
+
+    function updateAddressDisplayCard(user) {
+        const addr = user.address || {};
+        document.getElementById('display-name-phone').innerText = `${user.fullName} | +91 ${user.phone}`;
+        document.getElementById('display-full-address').innerText = 
+            `${addr.house}, ${addr.street}, ${addr.locality}, ${addr.city}, ${addr.state} - ${addr.pincode}`;
+    }
+
+    function toggleAddressEdit(showForm) {
+        isEditingAddress = showForm;
+        const form = document.getElementById('address-edit-form');
+        const card = document.getElementById('address-display-card');
+        const saveBtn = document.getElementById('btn-save-address');
+
+        if (showForm) {
+            card.classList.add('hidden');
+            form.classList.remove('hidden');
+            saveBtn.classList.remove('hidden');
+        } else {
+            card.classList.remove('hidden');
+            form.classList.add('hidden');
+            saveBtn.classList.add('hidden');
+        }
+        validateCheckout();
+    }
+
+    function saveAddressToProfile() {
+        const fields = ['cust-name', 'cust-phone', 'cust-pincode', 'cust-house', 'cust-address', 'cust-locality', 'cust-city', 'cust-state'];
+        let isValid = true;
+        fields.forEach(id => { if (!document.getElementById(id).value.trim()) isValid = false; });
+        if(document.getElementById('cust-phone').value.length !== 10) isValid = false;
+
+        if (!isValid) {
+            alert("Please fill all mandatory address fields correctly before saving.");
+            return;
+        }
+
+        let users = getUsers();
+        const currentUser = getCurrentUser();
+        
+        users = users.map(u => {
+            if (u.phone === currentUser.phone) {
+                u.fullName = document.getElementById('cust-name').value;
+                u.address = {
+                    house: document.getElementById('cust-house').value,
+                    street: document.getElementById('cust-address').value,
+                    locality: document.getElementById('cust-locality').value,
+                    city: document.getElementById('cust-city').value,
+                    state: document.getElementById('cust-state').value,
+                    pincode: document.getElementById('cust-pincode').value
+                };
+            }
+            return u;
+        });
+
+        localStorage.setItem('gr_users', JSON.stringify(users));
+
+        updateAddressDisplayCard(getCurrentUser());
+        toggleAddressEdit(false);
+    }
+
+    function updateCheckoutButton(){
+        const btn = document.getElementById('checkout-btn');
+        const user = getCurrentUser();
+
+        if(user){
+            btn.innerText = "PROCEED TO CHECKOUT";
+            btn.onclick = function(){
+                toggleCheckout(true);
+            };
+        }else{
+            btn.innerText = "LOGIN TO CONTINUE";
+            btn.onclick = function(){
+                window.location.href = "login.html";
+            };
+        }
+    }  
+</script>
+
+</body>  
+</html>
